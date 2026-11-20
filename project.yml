@@ -1,0 +1,81 @@
+# Generate the Xcode project with:  xcodegen generate
+# Before archiving for the App Store, set DEVELOPMENT_TEAM and PRODUCT_BUNDLE_IDENTIFIER below.
+name: PPicker
+
+options:
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    DEVELOPMENT_TEAM: ""            # <- your Apple Developer Team ID
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+targets:
+  PPicker:
+    type: application
+    platform: macOS
+    sources:
+      - PPicker
+    settings:
+      base:
+        PRODUCT_NAME: PPicker
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.ppicker   # <- change to your own
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: PPicker/Info.plist
+      properties:
+        CFBundleName: PPicker
+        CFBundleDisplayName: PPicker
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSApplicationCategoryType: public.app-category.utilities
+        LSUIElement: true
+        NSHumanReadableCopyright: "Open source under the MIT License."
+        CFBundleURLTypes:
+          - CFBundleURLName: Web URL
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [http, https]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: HTML document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [public.html, public.xhtml]
+    entitlements:
+      path: PPicker/PPicker.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        # Lets the user pick PPicker's Application Scripts folder to install the helper script.
+        com.apple.security.files.user-selected.read-write: true
+
+  PPickerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - PPickerTests
+    dependencies:
+      - target: PPicker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.ppicker.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  PPicker:
+    build:
+      targets:
+        PPicker: all
+        PPickerTests: [test]
+    test:
+      targets:
+        - PPickerTests

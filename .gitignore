@@ -11,3 +11,15 @@ xcuserdata/
 *.xcuserstate
 
 .DS_Store
+
+# Release artefacts
+*.xcresult
+*.pkg
+build/export/
+build/upload/
+
+# Signing material must never be committed
+private_keys/
+*.p8
+*.p12
+AuthKey_*.p8

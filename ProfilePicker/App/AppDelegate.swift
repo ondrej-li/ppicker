@@ -37,7 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         state.start()
         updateStatusItem()
 
-        // First run (or launched by hand): show settings so the user can make PPicker the default browser.
+        // First run (or launched by hand): show settings so the user can make Profile Picker the default browser.
         DispatchQueue.main.async { [self] in
             if !receivedLinkAtLaunch && !state.isDefaultBrowser { showSettings() }
         }
@@ -102,7 +102,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if state.config.showMenuBarIcon {
             if statusItem == nil {
                 let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-                item.button?.image = NSImage(systemSymbolName: "arrow.triangle.branch", accessibilityDescription: "PPicker")
+                if let icon = NSImage(named: "StatusIcon"), let copy = icon.copy() as? NSImage {
+                    copy.isTemplate = true
+                    copy.size = NSSize(width: 18, height: 18)
+                    item.button?.image = copy
+                } else {
+                    item.button?.image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: AppInfo.name)
+                }
+                item.button?.toolTip = AppInfo.name
                 item.menu = makeStatusMenu()
                 statusItem = item
             }
@@ -114,10 +121,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     private func makeStatusMenu() -> NSMenu {
         let menu = NSMenu()
-        menu.addItem(withTitle: "Settings…", action: #selector(showSettings), keyEquivalent: ",").target = self
+        menu.addItem(withTitle: "About \(AppInfo.name)", action: #selector(showAbout), keyEquivalent: "").target = self
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit PPicker", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(withTitle: "Settings…", action: #selector(showSettings), keyEquivalent: ",").target = self
+        menu.addItem(withTitle: "\(AppInfo.name) Help", action: #selector(showHelp), keyEquivalent: "").target = self
+        menu.addItem(withTitle: "Privacy Policy", action: #selector(showPrivacyPolicy), keyEquivalent: "").target = self
+        menu.addItem(.separator())
+        menu.addItem(withTitle: "Quit \(AppInfo.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         return menu
+    }
+
+    @objc func showAbout() {
+        NSApp.activate(ignoringOtherApps: true)
+        NSApp.orderFrontStandardAboutPanel(options: [
+            .applicationName: AppInfo.name,
+            .credits: NSAttributedString(
+                string: "Open every link in the right browser profile.\nBuilt with SwiftUI and AppKit. No tracking, no account, no network access.",
+                attributes: [.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)]
+            ),
+        ])
+    }
+
+    @objc func showHelp() {
+        openInSystemBrowser(AppInfo.helpURL)
+    }
+
+    @objc func showPrivacyPolicy() {
+        openInSystemBrowser(AppInfo.privacyURL)
+    }
+
+    /// Opens a help or policy link without handing it back to Profile Picker, which is the default
+    /// browser: NSWorkspace would send the link to us again and show the picker.
+    private func openInSystemBrowser(_ url: URL) {
+        guard let bundleID = state.systemBrowserID ?? state.catalog.browsers.first?.bundleID else {
+            NSWorkspace.shared.open(url)
+            return
+        }
+        Task { try? await Launcher.open(url, in: Target(bundleID: bundleID), helper: state.helper) }
     }
 
     // MARK: - Settings window
@@ -130,7 +170,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 backing: .buffered,
                 defer: false
             )
-            window.title = "PPicker Settings"
+            window.title = "Profile Picker Settings"
             window.titlebarAppearsTransparent = true
             window.toolbarStyle = .unified
             window.contentViewController = NSHostingController(rootView: SettingsView(state: state))
@@ -143,7 +183,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         // Show a Dock icon and menu bar while settings are open, like a normal app.
         NSApp.setActivationPolicy(.regular)
-        NSApp.activate()
+        NSApp.activate(ignoringOtherApps: true)
         settingsWindow?.makeKeyAndOrderFront(nil)
         Task { await state.refreshBrowsers() }
     }
@@ -154,18 +194,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 }
 
+enum AppInfo {
+    static let name = "Profile Picker"
+    static let repositoryURL = URL(string: "https://github.com/ondrej-li/ppicker")!
+    static let helpURL = repositoryURL
+    static let privacyURL = URL(string: "https://github.com/ondrej-li/ppicker/blob/main/PRIVACY.md")!
+}
+
 /// A minimal main menu so standard shortcuts (⌘Q, ⌘W, copy & paste in text fields) work.
 enum MainMenu {
     static func make() -> NSMenu {
         let main = NSMenu()
 
         let appMenu = NSMenu()
-        appMenu.addItem(withTitle: "About PPicker", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(withTitle: "About \(AppInfo.name)", action: #selector(AppDelegate.showAbout), keyEquivalent: "")
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Settings…", action: #selector(AppDelegate.showSettings), keyEquivalent: ",")
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Hide PPicker", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
-        appMenu.addItem(withTitle: "Quit PPicker", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appMenu.addItem(withTitle: "\(AppInfo.name) Help", action: #selector(AppDelegate.showHelp), keyEquivalent: "?")
+        appMenu.addItem(withTitle: "Privacy Policy", action: #selector(AppDelegate.showPrivacyPolicy), keyEquivalent: "")
+        appMenu.addItem(.separator())
+        appMenu.addItem(withTitle: "Hide \(AppInfo.name)", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        appMenu.addItem(withTitle: "Quit \(AppInfo.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         main.addItem(submenu(appMenu))
 
         let edit = NSMenu(title: "Edit")

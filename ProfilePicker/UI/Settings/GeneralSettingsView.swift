@@ -9,10 +9,10 @@ struct GeneralSettingsView: View {
             Section("Default browser") {
                 HStack {
                     if state.isDefaultBrowser {
-                        Label("PPicker is your default browser", systemImage: "checkmark.circle.fill")
+                        Label("Profile Picker is your default browser", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                     } else {
-                        Label("PPicker is not your default browser yet", systemImage: "exclamationmark.circle")
+                        Label("Profile Picker is not your default browser yet", systemImage: "exclamationmark.circle")
                             .foregroundStyle(.orange)
                     }
                     Spacer()
@@ -23,9 +23,14 @@ struct GeneralSettingsView: View {
                         .buttonStyle(.borderedProminent)
                     }
                 }
-                Text("Links you click in other apps go to PPicker, which opens them according to your rules.")
+                Text("Links you click in other apps go to Profile Picker, which opens them according to your rules.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
+                if let error = state.defaultBrowserError {
+                    Text(error)
+                        .font(.callout)
+                        .foregroundStyle(.red)
+                }
             }
 
             Section {
@@ -51,8 +56,8 @@ struct GeneralSettingsView: View {
             } header: {
                 Text("App")
             } footer: {
-                Text("PPicker starts by itself when you click a link, so opening at login only makes the first link a little faster. "
-                     + "Without the menu bar icon, open PPicker from your Applications folder to get back to these settings.")
+                Text("Profile Picker starts by itself when you click a link, so opening at login only makes the first link a little faster. "
+                     + "Without the menu bar icon, open Profile Picker from your Applications folder to get back to these settings.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }

@@ -17,7 +17,7 @@ struct BrowsersSettingsView: View {
                     Text("Browser profiles")
                 } footer: {
                     Text("macOS doesn’t let App Store apps open a browser in a particular profile. A tiny helper script, "
-                         + "which you install into PPicker’s own scripts folder, does this for PPicker. "
+                         + "which you install into Profile Picker’s own scripts folder, does this for Profile Picker. "
                          + "It can only read the browser’s list of profiles and open links.")
                         .font(.callout)
                         .foregroundStyle(.secondary)

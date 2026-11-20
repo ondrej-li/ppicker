@@ -16,6 +16,8 @@ final class AppState {
     let catalog = BrowserCatalog()
     let helper = Helper()
     private(set) var isDefaultBrowser = false
+    /// Set when macOS refuses to make Profile Picker the default browser, or the user cancels.
+    private(set) var defaultBrowserError: String?
 
     @ObservationIgnored var onConfigChange: (() -> Void)?
 
@@ -55,6 +57,7 @@ final class AppState {
         let currentID = Bundle(url: current)?.bundleIdentifier
         isDefaultBrowser = currentID == Bundle.main.bundleIdentifier
             || current.standardizedFileURL == Bundle.main.bundleURL.standardizedFileURL
+        if isDefaultBrowser { defaultBrowserError = nil }
         // Remember the browser the user had before, for "open normally".
         if !isDefaultBrowser, let currentID {
             config.systemBrowserID = currentID
@@ -63,6 +66,7 @@ final class AppState {
 
     func makeDefaultBrowser() async {
         refreshDefaultBrowserStatus()
+        defaultBrowserError = nil
         let app = Bundle.main.bundleURL
         do {
             // macOS asks the user to confirm; this also covers https and HTML files.
@@ -72,9 +76,14 @@ final class AppState {
                 try await NSWorkspace.shared.setDefaultApplication(at: app, toOpenURLsWithScheme: "https")
             }
         } catch {
+            defaultBrowserError = "macOS could not change the default browser: \(error.localizedDescription)"
             logger.error("Could not become the default browser: \(error.localizedDescription, privacy: .public)")
         }
         refreshDefaultBrowserStatus()
+        if !isDefaultBrowser, defaultBrowserError == nil {
+            defaultBrowserError = "Profile Picker is still not the default browser. Try again and confirm the macOS prompt, "
+                + "or choose it in System Settings › Desktop & Dock › Default web browser."
+        }
     }
 
     /// The browser to use for "open normally": the previous system default, or the first one found.

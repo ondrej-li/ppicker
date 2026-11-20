@@ -1,47 +1,59 @@
 # Generate the Xcode project with:  xcodegen generate
-# Before archiving for the App Store, set DEVELOPMENT_TEAM and PRODUCT_BUNDLE_IDENTIFIER below.
-name: PPicker
+name: ProfilePicker
 
 options:
   deploymentTarget:
     macOS: "26.0"
   createIntermediateGroups: true
+  groupSortPosition: top
 
 settings:
   base:
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_LANGUAGE: en
     SWIFT_VERSION: "6.0"
     SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
     SWIFT_APPROACHABLE_CONCURRENCY: YES
-    DEVELOPMENT_TEAM: ""            # <- your Apple Developer Team ID
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEVELOPMENT_TEAM: B592D69P29
     CODE_SIGN_STYLE: Automatic
     ENABLE_HARDENED_RUNTIME: YES
     ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    CLANG_ENABLE_MODULES: YES
 
 targets:
-  PPicker:
+  ProfilePicker:
     type: application
     platform: macOS
     sources:
-      - PPicker
+      - path: ProfilePicker
+        excludes:
+          - Info.plist
+          - ProfilePicker.entitlements
     settings:
       base:
-        PRODUCT_NAME: PPicker
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.ppicker   # <- change to your own
+        PRODUCT_NAME: Profile Picker
+        PRODUCT_MODULE_NAME: ProfilePicker
+        PRODUCT_BUNDLE_IDENTIFIER: cz.ondralinek.ppicker
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
         GENERATE_INFOPLIST_FILE: NO
     info:
-      path: PPicker/Info.plist
+      path: ProfilePicker/Info.plist
       properties:
-        CFBundleName: PPicker
-        CFBundleDisplayName: PPicker
+        CFBundleName: Profile Picker
+        CFBundleDisplayName: Profile Picker
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleIconName: AppIcon
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
         LSApplicationCategoryType: public.app-category.utilities
         LSUIElement: true
-        NSHumanReadableCopyright: "Open source under the MIT License."
+        ITSAppUsesNonExemptEncryption: false
+        NSHumanReadableCopyright: "Copyright © 2026 Ondřej Linek. MIT License."
         CFBundleURLTypes:
           - CFBundleURLName: Web URL
             CFBundleTypeRole: Viewer
@@ -52,30 +64,37 @@ targets:
             LSHandlerRank: Alternate
             LSItemContentTypes: [public.html, public.xhtml]
     entitlements:
-      path: PPicker/PPicker.entitlements
+      path: ProfilePicker/ProfilePicker.entitlements
       properties:
         com.apple.security.app-sandbox: true
-        # Lets the user pick PPicker's Application Scripts folder to install the helper script.
+        # Lets the user pick Profile Picker's Application Scripts folder to install the helper script.
         com.apple.security.files.user-selected.read-write: true
 
-  PPickerTests:
+  ProfilePickerTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - PPickerTests
+      - ProfilePickerTests
     dependencies:
-      - target: PPicker
+      - target: ProfilePicker
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.ppicker.tests
+        PRODUCT_BUNDLE_IDENTIFIER: cz.ondralinek.ppicker.tests
         GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Profile Picker.app/Contents/MacOS/Profile Picker"
+        BUNDLE_LOADER: "$(TEST_HOST)"
 
 schemes:
-  PPicker:
+  ProfilePicker:
     build:
       targets:
-        PPicker: all
-        PPickerTests: [test]
+        ProfilePicker: all
+        ProfilePickerTests: [test]
+    run:
+      config: Debug
     test:
+      config: Debug
       targets:
-        - PPickerTests
+        - ProfilePickerTests
+    archive:
+      config: Release

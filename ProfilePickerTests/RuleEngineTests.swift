@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import PPicker
+@testable import ProfilePicker
 
 @Suite struct GlobTests {
     @Test func wildcards() {

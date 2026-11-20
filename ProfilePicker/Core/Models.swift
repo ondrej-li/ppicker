@@ -75,7 +75,7 @@ nonisolated struct Config: Codable, Equatable, Sendable {
     var fallback: LinkAction = .showPicker
     /// Browsers / profiles not shown in the picker.
     var hiddenTargets: Set<Target> = []
-    /// The browser that was the system default before PPicker took over.
+    /// The browser that was the system default before Profile Picker took over.
     var systemBrowserID: String?
     var showMenuBarIcon: Bool = true
 
@@ -97,7 +97,7 @@ nonisolated struct SourceApp: Hashable, Sendable {
     var name: String
 }
 
-/// A link PPicker has been asked to open.
+/// A link Profile Picker has been asked to open.
 nonisolated struct LinkRequest: Sendable {
     var url: URL
     var source: SourceApp?

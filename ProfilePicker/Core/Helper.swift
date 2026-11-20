@@ -1,12 +1,12 @@
 import AppKit
 import Observation
 
-/// PPicker runs in the App Sandbox, which strips command-line arguments from apps it launches and
+/// Profile Picker runs in the App Sandbox, which strips command-line arguments from apps it launches and
 /// blocks reading other apps' data. Both are needed for browser profiles (`--profile-directory`).
 ///
 /// The sanctioned way around this is a script in the app's own Application Scripts folder
 /// (`~/Library/Application Scripts/<bundle id>/`): scripts there run outside the sandbox via
-/// `NSUserUnixTask`, but only the *user* can put them there. PPicker asks the user to confirm that
+/// `NSUserUnixTask`, but only the *user* can put them there. Profile Picker asks the user to confirm that
 /// folder in an open panel, then writes the script below into it.
 @Observable
 final class Helper {
@@ -16,16 +16,16 @@ final class Helper {
         case installed
     }
 
-    static let fileName = "ppicker-helper.sh"
+    static let fileName = "profile-picker-helper.sh"
     static let version = 1
 
     static let script = """
     #!/bin/sh
-    # PPicker helper, version \(version)
+    # Profile Picker helper, version \(version)
     #
-    # PPicker runs in the macOS App Sandbox, which stops it from opening a browser in a
+    # Profile Picker runs in the macOS App Sandbox, which stops it from opening a browser in a
     # specific profile and from reading the browser's profile list. You installed this
-    # script from PPicker's settings so it can do exactly two things on PPicker's behalf:
+    # script from Profile Picker's settings so it can do exactly two things on Profile Picker's behalf:
     #
     #   profiles <data dir> <output file>
     #       Copies the profile list (the "profile.info_cache" part of the browser's
@@ -33,7 +33,7 @@ final class Helper {
     #   open <browser app> <profile directory> <url>
     #       Opens <url> in <browser app> using that profile.
     #
-    # Deleting this file is safe; PPicker then opens links without choosing a profile.
+    # Deleting this file is safe; Profile Picker then opens links without choosing a profile.
     set -eu
 
     case "${1:-}" in
@@ -62,8 +62,8 @@ final class Helper {
 
         var errorDescription: String? {
             switch self {
-            case .notInstalled: "The PPicker helper is not installed."
-            case .wrongFolder: "Please choose the folder PPicker preselected (its Application Scripts folder)."
+            case .notInstalled: "The Profile Picker helper is not installed."
+            case .wrongFolder: "Please choose the folder Profile Picker preselected (its Application Scripts folder)."
             }
         }
     }
@@ -101,8 +101,8 @@ final class Helper {
         panel.allowsMultipleSelection = false
         panel.canCreateDirectories = false
         panel.prompt = "Install Helper"
-        panel.message = "To let PPicker open links in browser profiles, click “Install Helper”. "
-            + "This puts a small script into PPicker’s own scripts folder."
+        panel.message = "To let Profile Picker open links in browser profiles, click “Install Helper”. "
+            + "This puts a small script into Profile Picker’s own scripts folder."
 
         NSApp.activate()
         guard panel.runModal() == .OK, let chosen = panel.url else { return false }

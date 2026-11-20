@@ -30,7 +30,7 @@ final class PickerModel {
     }
 }
 
-/// A borderless floating panel that takes keyboard input without activating PPicker,
+/// A borderless floating panel that takes keyboard input without activating Profile Picker,
 /// so the app you clicked the link in stays in front if you cancel.
 final class PickerPanel: NSPanel {
     var onKeyDown: ((NSEvent) -> Bool)?
@@ -54,10 +54,18 @@ final class PickerController: NSObject, NSWindowDelegate {
     }
 
     func show(_ request: LinkRequest) {
+        // The catalogue is empty when the link that launched the app arrives before browser
+        // discovery has finished. Opening the link with NSWorkspace then would bounce it straight
+        // back to Profile Picker, which is the default browser, so wait for discovery first.
+        guard !state.catalog.browsers.isEmpty else {
+            refreshThenShow(request)
+            return
+        }
+
         let options = state.catalog.pickerOptions(firstBrowserID: state.systemBrowserID, hidden: state.config.hiddenTargets)
         guard !options.isEmpty else {
-            // Nothing to choose from (e.g. browsers still loading): let the system open it.
-            NSWorkspace.shared.open(request.url)
+            // Every target is hidden in Settings. Never send the link back to ourselves.
+            openWithSystemBrowser(request)
             return
         }
 
@@ -74,6 +82,55 @@ final class PickerController: NSObject, NSWindowDelegate {
         }
         position(panel)
         panel.makeKeyAndOrderFront(nil)
+    }
+
+    private var isPreparing = false
+    private var pendingRequest: LinkRequest?
+
+    private func refreshThenShow(_ request: LinkRequest) {
+        guard !isPreparing else {
+            pendingRequest = request
+            return
+        }
+        isPreparing = true
+        Task {
+            await state.refreshBrowsers()
+            isPreparing = false
+            let next = pendingRequest ?? request
+            pendingRequest = nil
+            if state.catalog.browsers.isEmpty {
+                presentNoBrowserAlert()
+            } else {
+                show(next)
+            }
+        }
+    }
+
+    private func openWithSystemBrowser(_ request: LinkRequest) {
+        guard let bundleID = state.systemBrowserID ?? state.catalog.browsers.first?.bundleID else {
+            presentNoBrowserAlert()
+            return
+        }
+        Task {
+            do {
+                try await Launcher.open(request.url, in: Target(bundleID: bundleID), helper: state.helper)
+            } catch {
+                presentNoBrowserAlert()
+            }
+        }
+    }
+
+    private func presentNoBrowserAlert() {
+        NSApp.activate(ignoringOtherApps: true)
+        let alert = NSAlert()
+        alert.messageText = "No web browser found"
+        alert.informativeText = "Profile Picker opens links in a web browser, but none is installed. "
+            + "Install a browser such as Safari, Chrome or Brave, then try again."
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Open Settings…")
+        if alert.runModal() == .alertSecondButtonReturn {
+            (NSApp.delegate as? AppDelegate)?.showSettings()
+        }
     }
 
     private func makePanel() -> PickerPanel {
@@ -213,17 +270,51 @@ struct PickerView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             header
-            VStack(spacing: 2) {
-                ForEach(Array(model.options.enumerated()), id: \.element.id) { index, option in
-                    row(option, index: index)
-                }
-            }
+            optionsList
             footer
         }
         .padding(14)
         .frame(width: 360)
         .glassEffect(.regular, in: .rect(cornerRadius: 24))
         .padding(Self.margin)
+    }
+
+    static let maxVisibleOptions = 8
+
+    /// A plain stack when everything fits, so no scroll indicator appears; a scrolling list beyond that.
+    @ViewBuilder
+    private var optionsList: some View {
+        if model.options.count > Self.maxVisibleOptions {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    rows
+                }
+                .scrollIndicators(.visible)
+                .frame(height: listHeight)
+                .onChange(of: model.selection) { _, index in
+                    guard model.options.indices.contains(index) else { return }
+                    withAnimation(.easeOut(duration: 0.12)) {
+                        proxy.scrollTo(model.options[index].id, anchor: .center)
+                    }
+                }
+            }
+        } else {
+            rows
+        }
+    }
+
+    private var rows: some View {
+        VStack(spacing: 2) {
+            ForEach(Array(model.options.enumerated()), id: \.element.id) { index, option in
+                row(option, index: index)
+                    .id(option.id)
+            }
+        }
+    }
+
+    private var listHeight: CGFloat {
+        // Each row is a 30 pt avatar plus 6 pt padding, and rows are 2 pt apart.
+        CGFloat(Self.maxVisibleOptions) * 42 + CGFloat(Self.maxVisibleOptions - 1) * 2
     }
 
     /// Transparent space around the glass so its edge and depth effects aren't clipped by the window.
@@ -295,6 +386,10 @@ struct PickerView: View {
         .contentShape(.rect)
         .onHover { if $0 { model.selection = index } }
         .onTapGesture { choose(index) }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint("Opens the link")
+        .accessibilityAction { choose(index) }
     }
 
     private var footer: some View {

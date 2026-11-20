@@ -123,7 +123,7 @@ final class BrowserCatalog {
     // MARK: - Discovery
 
     /// Apps that open both `https` links and HTML files, i.e. real browsers (not every app that
-    /// happens to claim `https`), excluding PPicker itself and copies in caches or hidden folders.
+    /// happens to claim `https`), excluding Profile Picker itself and copies in caches or hidden folders.
     /// Apps that register for web links and HTML files but aren't browsers.
     static let notBrowsers: Set<String> = [
         "com.googlecode.iterm2",

@@ -21,8 +21,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check:
+    name: Check configuration
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    steps:
+      - id: check
+        env:
+          KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          if [ -n "$KEY_ID" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::TestFlight secrets are not configured; skipping the archive and upload."
+          fi
+
   archive:
     name: Archive and upload
+    needs: check
+    if: needs.check.outputs.configured == 'true'
     runs-on: macos-26
     timeout-minutes: 45
     # Configure these repository secrets before enabling the upload step:

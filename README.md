@@ -2,6 +2,8 @@
 
 <p align="center"><img src="AppStore/AppIcon-1024.png" width="128" alt="Profile Picker icon"></p>
 
+<p align="center"><a href="https://github.com/ondrej-li/ppicker/actions/workflows/ci.yml"><img src="https://github.com/ondrej-li/ppicker/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
+
 Open every link in the right browser **profile**.
 
 Profile Picker is a small macOS app that you set as your default browser. When you click a link in any app, Profile Picker either opens it straight away according to your rules ("links from Slack open in Brave, *Work* profile") or shows a picker next to the mouse so you can choose a browser and profile.

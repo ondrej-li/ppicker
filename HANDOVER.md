@@ -4,9 +4,9 @@ Status as of 2026-11-20. Read the [README](README.md) first for what Profile Pic
 
 ## Status
 
-Version 1.0.0 is complete, signed with the App Store distribution certificate and packaged for
-TestFlight. It has not been submitted to App Review yet because the App Store Connect app record
-does not exist; creating it is a manual step in the web interface (see [APPSTORE.md](APPSTORE.md)).
+Version 1.0.0 is complete, signed with the App Store distribution certificate and uploaded to
+TestFlight as build 1. It has not been submitted to App Review yet. The App Store Connect app record
+was created by hand on 2026-11-22; see [APPSTORE.md](APPSTORE.md) for the remaining submission fields.
 
 | Area | State | How it was checked |
 |---|---|---|
@@ -27,7 +27,7 @@ does not exist; creating it is a manual step in the web interface (see [APPSTORE
 | Bundle ID and team | ✅ `cz.ondralinek.ppicker`, team `B592D69P29` | Build, archive and export |
 | Privacy manifest | ✅ `PrivacyInfo.xcprivacy` ships in the bundle | Copied to `Contents/Resources` in the built app |
 | App Store package | ✅ Archive and export succeed | `scripts/release.sh`; `DistributionSummary.plist` shows Apple Distribution and the Mac Team Store profile |
-| TestFlight upload | ⚠️ Waiting for the App Store Connect app record | `xcodebuild` reports bundle ID not found in App Store Connect |
+| TestFlight upload | ✅ Build 1 uploaded on 2026-11-22, processing | `xcodebuild -exportArchive` with `destination=upload`; "Upload succeeded" |
 | CI | ✅ Build and test workflow on `macos-26` | `.github/workflows/ci.yml` |
 
 ## Decisions and why
@@ -153,9 +153,10 @@ app record are in [APPSTORE.md](APPSTORE.md).
   key and a distribution certificate from repository secrets. The API key is required for
   `-allowProvisioningUpdates` on a runner with no Xcode account.
 
-Before the first upload, create the app record in App Store Connect (New App, macOS,
-**Profile Picker**, `cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`). The App Store Connect API has no
-endpoint for creating app records.
+The app record (`cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`) exists. Apple has no API for creating
+app records, so that step was done in the App Store Connect website. Build 1 was uploaded on
+2026-11-22 and is processing; add it to an internal tester group when processing completes. Bump
+`CURRENT_PROJECT_VERSION` before the next upload.
 
 ## Ideas for later
 

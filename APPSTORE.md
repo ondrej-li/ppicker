@@ -23,10 +23,12 @@ Values in **bold** are copy-paste ready.
 | Privacy Policy URL | **https://github.com/ondrej-li/ppicker/blob/main/PRIVACY.md** |
 | App icon | `AppStore/AppIcon-1024.png` (also in the asset catalogue) |
 
-## Before the first upload
+## App record
 
-An upload is only accepted after the app record exists. There is no App Store Connect API for
-creating app records, so this one step has to happen in the App Store Connect web interface:
+The app record `cz.ondralinek.ppicker` was created on 2026-11-22 and **build 1 was uploaded to
+TestFlight** (processing). Add the build to an internal tester group in TestFlight when processing
+completes. The steps below are kept for reference; Apple has no API for creating app records, so
+this one step has to happen in the App Store Connect web interface:
 
 1. Open <https://appstoreconnect.apple.com/apps> and click **+ ▸ New App**.
 2. Platform **macOS**, name **Profile Picker**, primary language **English (U.S.)**,
@@ -198,9 +200,9 @@ section of App Store Connect; add the build to the internal tester group after p
 
 ## Submission checklist
 
-- [ ] App record created in App Store Connect (see above).
+- [x] App record created in App Store Connect (2026-11-22).
 - [ ] Name, subtitle, description, keywords, URLs and category filled in.
-- [ ] Build 1 uploaded and processed; TestFlight tested.
+- [ ] Build 1 uploaded (2026-11-22, processing); add it to a tester group and test on TestFlight.
 - [ ] App Privacy: Data Not Collected.
 - [ ] Age rating: 4+.
 - [ ] Screenshots uploaded (2560 × 1600 or 2880 × 1800).

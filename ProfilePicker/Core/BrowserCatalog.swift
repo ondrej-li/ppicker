@@ -39,10 +39,16 @@ final class BrowserCatalog {
         defer { isRefreshing = false }
 
         var found = Self.installedBrowsers()
-        if helper.isUsable {
-            for index in found.indices {
-                guard let dataDirectory = KnownBrowsers.dataDirectory(for: found[index].bundleID) else { continue }
-                found[index].profiles = (try? await helper.profiles(dataDirectory: dataDirectory)) ?? []
+        if AppSandbox.isEnabled {
+            if helper.isUsable {
+                for index in found.indices {
+                    guard let dataDirectory = KnownBrowsers.dataDirectory(for: found[index].bundleID) else { continue }
+                    found[index].profiles = (try? await helper.profiles(dataDirectory: dataDirectory)) ?? []
+                }
+            }
+        } else {
+            for index in found.indices where KnownBrowsers.supportsProfiles(found[index].bundleID) {
+                found[index].profiles = DirectBrowserAccess.profiles(bundleID: found[index].bundleID)
             }
         }
         browsers = found

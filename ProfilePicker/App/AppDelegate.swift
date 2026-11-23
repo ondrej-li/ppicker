@@ -173,9 +173,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.title = "Profile Picker Settings"
             window.titlebarAppearsTransparent = true
             window.toolbarStyle = .unified
-            window.contentViewController = NSHostingController(rootView: SettingsView(state: state))
+            // Host SwiftUI in a plain container pinned to the window. A hosting controller lets the
+            // content's ideal size drive the window, which made the Rules pane taller than the screen.
+            let container = NSView()
+            let hosting = NSHostingView(rootView: SettingsView(state: state))
+            hosting.sizingOptions = []
+            hosting.translatesAutoresizingMaskIntoConstraints = false
+            container.addSubview(hosting)
+            NSLayoutConstraint.activate([
+                hosting.topAnchor.constraint(equalTo: container.topAnchor),
+                hosting.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+                hosting.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+                hosting.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            ])
+            window.contentView = container
             window.setContentSize(NSSize(width: 760, height: 520))
             window.minSize = NSSize(width: 640, height: 420)
+            window.maxSize = NSSize(width: 1400, height: 1000)
             window.isReleasedWhenClosed = false
             window.delegate = self
             window.center()

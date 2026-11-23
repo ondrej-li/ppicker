@@ -17,12 +17,23 @@ enum Launcher {
             throw LaunchError.browserNotFound(target.bundleID)
         }
 
-        if let profile = target.profile, KnownBrowsers.supportsProfiles(target.bundleID), helper.isUsable {
-            do {
-                try await helper.open(url, appURL: appURL, profile: profile)
-                return
-            } catch {
-                logger.error("Helper failed (\(error.localizedDescription, privacy: .public)), opening without a profile")
+        if let profile = target.profile, KnownBrowsers.supportsProfiles(target.bundleID) {
+            // Developer builds are not sandboxed, so they can pass the profile argument themselves.
+            if !AppSandbox.isEnabled {
+                do {
+                    try DirectBrowserAccess.open(url, appURL: appURL, profile: profile)
+                    return
+                } catch {
+                    logger.error("Direct profile launch failed (\(error.localizedDescription, privacy: .public)), trying the helper")
+                }
+            }
+            if helper.isUsable {
+                do {
+                    try await helper.open(url, appURL: appURL, profile: profile)
+                    return
+                } catch {
+                    logger.error("Helper failed (\(error.localizedDescription, privacy: .public)), opening without a profile")
+                }
             }
         }
 

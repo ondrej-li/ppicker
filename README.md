@@ -17,18 +17,31 @@ Profile Picker is a small macOS app that you set as your default browser. When y
 
 The App Store listing name is **Profile Picker**. Bundle ID `cz.ondralinek.ppicker`, team `B592D69P29`.
 
-## How browser profiles work (and why there's a helper script)
+## How browser profiles work
 
-Chromium browsers open a link in a given profile when launched with `--profile-directory="Profile 1"`. Mac App Store apps must run in the App Sandbox, and the sandbox **strips command-line arguments** from apps it launches and **blocks reading** other apps' data (such as the browser's list of profiles).
+Chromium browsers open a link in a given profile when launched with `--profile-directory="Profile 1"`.
 
-macOS's sanctioned way out is a script in the app's own *Application Scripts* folder (`~/Library/Application Scripts/<bundle id>/`). Such scripts run outside the sandbox via `NSUserUnixTask`, but only the user can put them there. Profile Picker's settings (Browsers ▸ *Install Helper…*) open that folder in a standard dialog; clicking *Install Helper* writes [`profile-picker-helper.sh`](ProfilePicker/Core/Helper.swift) into it. The script can do exactly two things:
+**Developer builds need no helper.** Debug and Release builds from source run outside the App Sandbox,
+so Profile Picker reads the browser's `Local State` file itself and runs
+`open -n -a <browser> --args --profile-directory=<profile> <url>`. Build and run from Xcode and
+profiles work straight away.
+
+**The App Store build is sandboxed.** Mac App Store apps must run in the App Sandbox, and the sandbox
+**strips command-line arguments** from apps it launches and **blocks reading** other apps' data (such
+as the browser's list of profiles). macOS's sanctioned way out is a script in the app's own
+*Application Scripts* folder (`~/Library/Application Scripts/<bundle id>/`). Such scripts run outside
+the sandbox via `NSUserUnixTask`, but only the user can put them there. Profile Picker's settings
+(Browsers ▸ *Install Helper…*) open that folder in a standard dialog; clicking *Install Helper*
+writes [`profile-picker-helper.sh`](ProfilePicker/Core/Helper.swift) into it. The script can do
+exactly two things:
 
 | Command | What it does |
 |---|---|
 | `profiles <data dir> <output>` | Copies the `profile.info_cache` part of the browser's `Local State` file (profile folder names, display names, colors) using `plutil`. Nothing else is read. |
 | `open <app> <profile> <url>` | Runs `open -n -a <app> --args --profile-directory=<profile> <url>`. |
 
-Without the helper Profile Picker still works, but it can only choose between browsers, not profiles. Deleting the script is always safe.
+Without the helper the App Store build still routes links between browsers, but cannot choose a
+profile. Deleting the script is always safe.
 
 ## Building
 
@@ -39,8 +52,10 @@ xcodegen generate              # creates ProfilePicker.xcodeproj from project.ym
 open ProfilePicker.xcodeproj
 ```
 
-`project.yml` already carries the bundle ID and team. A normal Debug run signs with your
-development identity.
+`project.yml` already carries the bundle ID and team. Debug and Release use
+[`ProfilePicker-Developer.entitlements`](ProfilePicker/ProfilePicker-Developer.entitlements) and run
+**unsandboxed**, which is why they need no helper. The `AppStore` configuration uses
+[`ProfilePicker.entitlements`](ProfilePicker/ProfilePicker.entitlements) and the sandbox.
 
 Command line (ad-hoc, no team needed):
 
@@ -54,6 +69,13 @@ open "build/Build/Products/Debug/Profile Picker.app"
 
 To try it without changing your default browser: `open -a "build/Build/Products/Debug/Profile Picker.app" https://example.com`
 
+To run the sandboxed App Store build locally:
+
+```sh
+xcodebuild -scheme ProfilePicker -configuration AppStore -derivedDataPath build \
+  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= build
+```
+
 ## Releasing
 
 ```sh
@@ -61,9 +83,10 @@ scripts/release.sh               # archive + export to build/export/Profile Pick
 scripts/release.sh --upload      # also upload to App Store Connect with the Xcode account
 ```
 
-Bump `CURRENT_PROJECT_VERSION` in [`project.yml`](project.yml) before each upload. The archive is
-signed with the Apple Distribution certificate and the *Mac Team Store* provisioning profile for
-`cz.ondralinek.ppicker`; the exported package is what TestFlight receives.
+The script archives the **AppStore** configuration (sandboxed). Bump `CURRENT_PROJECT_VERSION` in
+[`project.yml`](project.yml) before each upload. The archive is signed with the Apple Distribution
+certificate and the *Mac Team Store* provisioning profile for `cz.ondralinek.ppicker`; the exported
+package is what TestFlight receives.
 
 `APPSTORE.md` has the App Store fields, privacy answers, screenshots, review notes and the steps to
 create the app record (required before the first upload).
@@ -83,6 +106,7 @@ create the app record (required before the first upload).
 | `ProfilePicker/Core/Profiles.swift` | Known Chromium browsers and their data folders; `Local State` parsing |
 | `ProfilePicker/Core/BrowserCatalog.swift` | Finds installed browsers and their profiles |
 | `ProfilePicker/Core/Helper.swift` | The helper script, its installation, and running it |
+| `ProfilePicker/Core/DirectAccess.swift` | Direct profile reading and launching for unsandboxed developer builds |
 | `ProfilePicker/Core/Launcher.swift` | Opens a link in a browser/profile; resolves the app a link came from |
 | `ProfilePicker/UI/Picker.swift` | The floating picker panel |
 | `ProfilePicker/UI/Settings/` | Settings window: General, Browsers, Rules |

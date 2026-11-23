@@ -11,9 +11,11 @@ was created by hand on 2026-11-22; see [APPSTORE.md](APPSTORE.md) for the remain
 | Area | State | How it was checked |
 |---|---|---|
 | Debug and Release builds | ✅ No warnings in app code | `xcodebuild` |
-| Unit tests | ✅ 14 tests pass | Rule engine, wildcards, profile parsing, config decoding |
-| Release entitlements | ✅ Only `app-sandbox` and `files.user-selected.read-write` | `codesign -d --entitlements -` on the Release build |
+| Unit tests | ✅ 16 tests pass | Rule engine, wildcards, profile parsing, config decoding, direct profile reading |
+| App Store entitlements | ✅ Only `app-sandbox` and `files.user-selected.read-write` | `codesign -d --entitlements -` on the AppStore build |
+| Developer build without helper | ✅ Profiles appear with an empty Application Scripts folder | Debug build, Browsers tab |
 | Profile discovery through the helper | ✅ Works | Found 2 Brave and 3 Chrome profiles on a real machine |
+| Rules pane fits the window | ✅ The + button and test box stay visible at 760×520 | Accessibility frames and screenshots |
 | Picker panel | ✅ Renders with Liquid Glass and no window frame | Screenshot of the panel window |
 | Source app detection | ✅ Works for apps that send the link themselves | A test app sent a link; the log showed its bundle ID |
 | Passing `--profile-directory` through the helper | ⚠️ Arguments arrive intact | Verified with a test app that records its arguments, **not with a real browser** |
@@ -32,7 +34,25 @@ was created by hand on 2026-11-22; see [APPSTORE.md](APPSTORE.md) for the remain
 
 ## Decisions and why
 
-### Sandboxed, with a user-installed helper script
+### Developer builds run unsandboxed
+
+Requiring the helper in an app built from source was unnecessary friction, so the project has three
+build configurations. **Debug** and **Release** use
+[ProfilePicker-Developer.entitlements](ProfilePicker/ProfilePicker-Developer.entitlements) (empty)
+and run outside the sandbox; [DirectAccess.swift](ProfilePicker/Core/DirectAccess.swift) reads
+`Local State` and runs `open -n -a <browser> --args --profile-directory=…` itself. Nothing has to be
+installed. **AppStore** is the only sandboxed configuration and is used by `scripts/release.sh` and
+the TestFlight workflow. `AppSandbox.isEnabled` picks the path at runtime, and the Browsers pane
+shows the helper only in the sandboxed build.
+
+### Settings window sizing
+
+The Rules pane contains a `List`. SwiftUI asked for a ~2000 pt tall content for it, and
+`NSHostingController` let the window grow to that height, which put the + button below the screen.
+The SwiftUI view is now hosted in a plain container pinned to the window, and `RulesSettingsView`
+wraps its content in a `GeometryReader` with a finite frame. The rule editor is a 560×480 sheet.
+
+### Sandboxed App Store build, with a user-installed helper script
 
 The App Store requires the App Sandbox, and two things profiles depend on don't work inside it. Both were tested with small throwaway apps before writing Profile Picker:
 
@@ -131,6 +151,8 @@ Do this on a real setup before release, ideally with Brave or Chrome both runnin
 - [ ] Double-clicking an `.html` file in Finder routes it through Profile Picker.
 - [ ] After deleting the helper script, links open in the browser without a profile, and Settings offers to install it again.
 - [ ] Rules editor: add, edit, duplicate, delete, reorder, disable; the "Test a link" box.
+- [ ] In a Debug build, the Browsers tab lists profiles without installing the helper.
+- [ ] In an AppStore build, the Browsers tab offers "Install Helper…" instead.
 - [ ] Hide the menu bar icon, then open Profile Picker from Applications: Settings opens.
 - [ ] Open at login.
 - [ ] Light mode, multiple displays, and a full-screen app in front.
@@ -145,6 +167,7 @@ app record are in [APPSTORE.md](APPSTORE.md).
   to App Store Connect with the signed-in Xcode account (or with `ASC_KEY_ID`,
   `ASC_ISSUER_ID` and `ASC_PRIVATE_KEY_PATH`).
 - `CURRENT_PROJECT_VERSION` in `project.yml` is the build number; it must increase for every upload.
+- `scripts/release.sh` archives the **AppStore** configuration; developer builds never use it.
 - The archive/export was verified with team `B592D69P29`: the app is signed with *Apple
   Distribution* and the *Mac Team Store Provisioning Profile: cz.ondralinek.ppicker*, and the only
   entitlements are `app-sandbox` and `files.user-selected.read-write` plus the application and team
@@ -155,8 +178,9 @@ app record are in [APPSTORE.md](APPSTORE.md).
 
 The app record (`cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`) exists. Apple has no API for creating
 app records, so that step was done in the App Store Connect website. Build 1 was uploaded on
-2026-11-22 and is processing; add it to an internal tester group when processing completes. Bump
-`CURRENT_PROJECT_VERSION` before the next upload.
+2026-11-22; build 2 followed on 2026-11-23 with the Rules layout and developer-build fixes. Add the
+build to an internal tester group in TestFlight. Bump `CURRENT_PROJECT_VERSION` before the next
+upload.
 
 ## Ideas for later
 

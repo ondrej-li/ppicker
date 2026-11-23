@@ -10,75 +10,81 @@ struct RulesSettingsView: View {
     @State private var testSource: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Rules are checked from top to bottom; the first match wins. Drag to reorder. "
-                 + "When nothing matches: \(state.describe(state.config.fallback)) (change this in General).")
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+        // A finite frame keeps the List from claiming an enormous ideal height; without it the
+        // pane grows past the window and the buttons below the list end up off-screen.
+        GeometryReader { proxy in
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Rules are checked from top to bottom; the first match wins. Drag to reorder. "
+                     + "When nothing matches: \(state.describe(state.config.fallback)) (change this in General).")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
 
-            List(selection: $selection) {
-                ForEach($state.config.rules) { $rule in
-                    RuleRow(rule: $rule, summary: summary(of: rule))
-                        .tag(rule.id)
+                List(selection: $selection) {
+                    ForEach($state.config.rules) { $rule in
+                        RuleRow(rule: $rule, summary: summary(of: rule))
+                            .tag(rule.id)
+                    }
+                    .onMove { state.config.rules.move(fromOffsets: $0, toOffset: $1) }
                 }
-                .onMove { state.config.rules.move(fromOffsets: $0, toOffset: $1) }
-            }
-            .listStyle(.bordered)
-            .alternatingRowBackgrounds()
-            .overlay {
-                if state.config.rules.isEmpty {
-                    Text("No rules yet. Add one with +, or choose “Always…” in the picker.")
-                        .foregroundStyle(.secondary)
+                .listStyle(.bordered)
+                .alternatingRowBackgrounds()
+                .frame(minHeight: 100)
+                .overlay {
+                    if state.config.rules.isEmpty {
+                        Text("No rules yet. Add one with +, or choose “Always…” in the picker.")
+                            .foregroundStyle(.secondary)
+                    }
                 }
-            }
-            .contextMenu(forSelectionType: Rule.ID.self) { ids in
-                if let id = ids.first, let rule = rule(id) {
-                    Button("Edit…") { edit(rule) }
-                    Button("Duplicate") { duplicate(rule) }
-                    Divider()
-                    Button("Delete", role: .destructive) { delete(id) }
+                .contextMenu(forSelectionType: Rule.ID.self) { ids in
+                    if let id = ids.first, let rule = rule(id) {
+                        Button("Edit…") { edit(rule) }
+                        Button("Duplicate") { duplicate(rule) }
+                        Divider()
+                        Button("Delete", role: .destructive) { delete(id) }
+                    }
+                } primaryAction: { ids in
+                    if let id = ids.first, let rule = rule(id) { edit(rule) }
                 }
-            } primaryAction: { ids in
-                if let id = ids.first, let rule = rule(id) { edit(rule) }
-            }
 
-            HStack(spacing: 6) {
-                Button { addRule() } label: { Image(systemName: "plus").frame(width: 16) }
-                    .help("Add a rule")
-                Button {
-                    if let selection { delete(selection) }
-                } label: { Image(systemName: "minus").frame(width: 16) }
-                    .help("Delete the selected rule")
+                HStack(spacing: 6) {
+                    Button { addRule() } label: { Image(systemName: "plus").frame(width: 16) }
+                        .help("Add a rule")
+                    Button {
+                        if let selection { delete(selection) }
+                    } label: { Image(systemName: "minus").frame(width: 16) }
+                        .help("Delete the selected rule")
+                        .disabled(selection == nil)
+                    Spacer()
+                    Button("Edit…") {
+                        if let selection, let rule = rule(selection) { edit(rule) }
+                    }
                     .disabled(selection == nil)
-                Spacer()
-                Button("Edit…") {
-                    if let selection, let rule = rule(selection) { edit(rule) }
                 }
-                .disabled(selection == nil)
-            }
 
-            GroupBox("Test a link") {
-                Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
-                    GridRow {
-                        Text("Link").gridColumnAlignment(.trailing)
-                        TextField("Link", text: $testURL, prompt: Text("https://example.com/page"))
-                            .labelsHidden()
+                GroupBox("Test a link") {
+                    Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
+                        GridRow {
+                            Text("Link").gridColumnAlignment(.trailing)
+                            TextField("Link", text: $testURL, prompt: Text("https://example.com/page"))
+                                .labelsHidden()
+                        }
+                        GridRow {
+                            Text("Clicked in")
+                            SourceAppField(title: nil, bundleID: $testSource, catalog: state.catalog, allowsAny: true)
+                                .fixedSize()
+                        }
+                        GridRow {
+                            Text("Result")
+                            testResult
+                        }
                     }
-                    GridRow {
-                        Text("Clicked in")
-                        SourceAppField(title: nil, bundleID: $testSource, catalog: state.catalog, allowsAny: true)
-                            .fixedSize()
-                    }
-                    GridRow {
-                        Text("Result")
-                        testResult
-                    }
+                    .padding(6)
                 }
-                .padding(6)
             }
+            .padding(20)
+            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
         }
-        .padding(20)
         .navigationTitle("Rules")
         .sheet(item: $editing) { rule in
             RuleEditorView(rule: rule, state: state, isNew: isNewRule) { saved in

@@ -12,15 +12,27 @@ struct BrowsersSettingsView: View {
         Form {
             if hasProfileBrowsers {
                 Section {
-                    helperRow
+                    if AppSandbox.isEnabled {
+                        helperRow
+                    } else {
+                        Label("Profiles are available directly in this build", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    }
                 } header: {
                     Text("Browser profiles")
                 } footer: {
-                    Text("macOS doesn’t let App Store apps open a browser in a particular profile. A tiny helper script, "
-                         + "which you install into Profile Picker’s own scripts folder, does this for Profile Picker. "
-                         + "It can only read the browser’s list of profiles and open links.")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
+                    Group {
+                        if AppSandbox.isEnabled {
+                            Text("macOS doesn’t let App Store apps open a browser in a particular profile. A tiny helper script, "
+                                 + "which you install into Profile Picker’s own scripts folder, does this for Profile Picker. "
+                                 + "It can only read the browser’s list of profiles and open links.")
+                        } else {
+                            Text("This is a developer build, which runs outside the App Store sandbox. It reads browser profiles "
+                                 + "and opens them directly, so no helper script is needed. The App Store build uses the helper.")
+                        }
+                    }
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
                 }
             }
 

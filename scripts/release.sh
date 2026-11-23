@@ -26,7 +26,7 @@ xcodegen generate
 xcodebuild \
     -project ProfilePicker.xcodeproj \
     -scheme ProfilePicker \
-    -configuration Release \
+    -configuration AppStore \
     -destination 'generic/platform=macOS' \
     -archivePath build/ProfilePicker.xcarchive \
     -allowProvisioningUpdates \

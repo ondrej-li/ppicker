@@ -41,7 +41,7 @@ jobs:
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             test
 
-      - name: Build (Release, ad-hoc signed)
+      - name: Build (Release, developer configuration, ad-hoc signed)
         run: |
           xcodebuild \
             -project ProfilePicker.xcodeproj \
@@ -52,9 +52,21 @@ jobs:
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             build
 
-      - name: Check the bundle
+      - name: Build (App Store configuration, ad-hoc signed)
         run: |
-          APP="build/Build/Products/Release/Profile Picker.app"
+          xcodebuild \
+            -project ProfilePicker.xcodeproj \
+            -scheme ProfilePicker \
+            -configuration AppStore \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            build
+
+      - name: Check the App Store bundle
+        run: |
+          APP="build/Build/Products/AppStore/Profile Picker.app"
           /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Contents/Info.plist"
           test -f "$APP/Contents/Resources/PrivacyInfo.xcprivacy"
           test -f "$APP/Contents/Resources/AppIcon.icns"
+          codesign -d --entitlements - --xml "$APP" 2>/dev/null | plutil -p - | grep -q '"com.apple.security.app-sandbox" => true'

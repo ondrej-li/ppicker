@@ -21,7 +21,7 @@ enum Launcher {
             // Developer builds are not sandboxed, so they can pass the profile argument themselves.
             if !AppSandbox.isEnabled {
                 do {
-                    try DirectBrowserAccess.open(url, appURL: appURL, profile: profile)
+                    try await DirectBrowserAccess.open(url, appURL: appURL, profile: profile)
                     return
                 } catch {
                     logger.error("Direct profile launch failed (\(error.localizedDescription, privacy: .public)), trying the helper")

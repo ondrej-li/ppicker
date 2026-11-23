@@ -27,10 +27,33 @@ nonisolated enum DirectBrowserAccess {
         return ProfileParser.parse(data)
     }
 
-    static func open(_ url: URL, appURL: URL, profile: String) throws {
+    enum DirectAccessError: LocalizedError {
+        case openFailed(Int32)
+
+        var errorDescription: String? {
+            switch self {
+            case .openFailed(let status): "open exited with status \(status)."
+            }
+        }
+    }
+
+    static func open(_ url: URL, appURL: URL, profile: String) async throws {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
         process.arguments = ["-n", "-a", appURL.path, "--args", "--profile-directory=\(profile)", url.absoluteString]
-        try process.run()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            process.terminationHandler = { finished in
+                if finished.terminationStatus == 0 {
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: DirectAccessError.openFailed(finished.terminationStatus))
+                }
+            }
+            do {
+                try process.run()
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
     }
 }

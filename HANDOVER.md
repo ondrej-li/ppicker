@@ -29,7 +29,8 @@ was created by hand on 2026-11-22; see [APPSTORE.md](APPSTORE.md) for the remain
 | Bundle ID and team | ✅ `cz.ondralinek.ppicker`, team `B592D69P29` | Build, archive and export |
 | Privacy manifest | ✅ `PrivacyInfo.xcprivacy` ships in the bundle | Copied to `Contents/Resources` in the built app |
 | App Store package | ✅ Archive and export succeed | `scripts/release.sh`; `DistributionSummary.plist` shows Apple Distribution and the Mac Team Store profile |
-| TestFlight upload | ✅ Build 1 uploaded on 2026-11-22, processing | `xcodebuild -exportArchive` with `destination=upload`; "Upload succeeded" |
+| TestFlight upload | ✅ Build 2 uploaded on 2026-11-23 | `scripts/release.sh --upload`; "Upload succeeded" |
+| Direct download package | ✅ Developer ID-signed, notarized DMG and zip | `scripts/package.sh`; `spctl -a` reports Notarized Developer ID |
 | CI | ✅ Build and test workflow on `macos-26` | `.github/workflows/ci.yml` |
 
 ## Decisions and why
@@ -174,7 +175,24 @@ app record are in [APPSTORE.md](APPSTORE.md).
   identifiers added by the profile.
 - `.github/workflows/testflight.yml` repeats the archive/export/upload with an App Store Connect API
   key and a distribution certificate from repository secrets. The API key is required for
-  `-allowProvisioningUpdates` on a runner with no Xcode account.
+  `-allowProvisioningUpdates` on a runner with no Xcode account. It triggers on `testflight-v*` tags so
+  public `v*` releases do not start it.
+
+### Direct download
+
+`scripts/package.sh` builds the **Release** configuration (unsandboxed, so no helper is needed),
+signs it with Developer ID, submits it to Apple's notary service with the signed-in Xcode account,
+waits for the result, staples the ticket, and writes:
+
+- `build/ProfilePicker-<version>.dmg` — drag-to-Applications disk image with a Read Me
+- `build/ProfilePicker-<version>.zip` — the notarized app
+- `build/ProfilePicker-<version>-SHA256SUMS.txt`
+
+Xcode created a **Cloud Managed Developer ID Application** certificate for the team; no separate
+notary credentials are stored. `xcodebuild -exportArchive` with `destination=upload` and
+`method=developer-id` submits the archive, and `-exportNotarizedApp` retrieves the notarized app when
+processing finishes. Publish with `gh release create v<version>` and attach the three files; the
+release notes are in [Packaging/release-notes-1.0.0.md](Packaging/release-notes-1.0.0.md).
 
 The app record (`cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`) exists. Apple has no API for creating
 app records, so that step was done in the App Store Connect website. Build 1 was uploaded on

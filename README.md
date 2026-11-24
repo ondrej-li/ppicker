@@ -6,6 +6,15 @@
 
 Open every link in the right browser **profile**.
 
+## Download
+
+[**Download the latest release**](https://github.com/ondrej-li/ppicker/releases/latest), open the
+DMG and drag **Profile Picker** onto the Applications folder. Requires **macOS 26** or later.
+
+The download is signed with a Developer ID certificate and notarized by Apple. It runs outside the
+App Sandbox, so browser profiles work directly and no helper script is needed. The App Store build is
+sandboxed and uses the optional helper instead.
+
 Profile Picker is a small macOS app that you set as your default browser. When you click a link in any app, Profile Picker either opens it straight away according to your rules ("links from Slack open in Brave, *Work* profile") or shows a picker next to the mouse so you can choose a browser and profile.
 
 - Works with Chromium browsers' profiles (Chrome, Brave, Edge, Vivaldi, Chromium) and with any other browser (Safari, Firefox, …) as a whole.
@@ -78,6 +87,27 @@ xcodebuild -scheme ProfilePicker -configuration AppStore -derivedDataPath build 
 
 ## Releasing
 
+### Direct download (GitHub release)
+
+```sh
+scripts/package.sh
+```
+
+This archives the **Release** configuration, signs it with a Developer ID certificate, submits it to
+Apple's notary service, and writes a drag-to-Applications
+`build/ProfilePicker-<version>.dmg`, a `.zip`, and SHA-256 checksums. The Xcode account signed in to
+team `B592D69P29` does the signing and notarization; no separate notary credentials are needed.
+
+Create the public release after the script finishes (adjust the version and notes file):
+
+```sh
+gh release create v1.0.0 --title "Profile Picker 1.0.0" \
+  --notes-file Packaging/release-notes-1.0.0.md \
+  build/ProfilePicker-1.0.0.dmg build/ProfilePicker-1.0.0.zip build/ProfilePicker-1.0.0-SHA256SUMS.txt
+```
+
+### App Store / TestFlight
+
 ```sh
 scripts/release.sh               # archive + export to build/export/Profile Picker.pkg
 scripts/release.sh --upload      # also upload to App Store Connect with the Xcode account
@@ -94,7 +124,7 @@ create the app record (required before the first upload).
 ### CI
 
 - [`.github/workflows/ci.yml`](.github/workflows/ci.yml) builds and tests on every push and pull request on a `macos-26` runner.
-- [`.github/workflows/testflight.yml`](.github/workflows/testflight.yml) archives, exports and optionally uploads to TestFlight on a `v*` tag or manually. It needs these repository secrets: `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`, `BUILD_CERTIFICATE_BASE64`, `P12_PASSWORD`, `KEYCHAIN_PASSWORD`.
+- [`.github/workflows/testflight.yml`](.github/workflows/testflight.yml) archives, exports and optionally uploads to TestFlight on a `testflight-v*` tag or manually. It needs these repository secrets: `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`, `BUILD_CERTIFICATE_BASE64`, `P12_PASSWORD`, `KEYCHAIN_PASSWORD`.
 
 ## Project layout
 
@@ -114,6 +144,8 @@ create the app record (required before the first upload).
 | `ProfilePicker/PrivacyInfo.xcprivacy` | Privacy manifest |
 | `scripts/make-icon.swift` | Redraws the icon artwork into the asset catalogue and `AppStore/` |
 | `scripts/release.sh` | Archive, export and optional TestFlight upload |
+| `scripts/package.sh` | Developer ID-signed, notarized DMG and zip for direct download |
+| `Packaging/` | DMG Read Me and GitHub release notes |
 | `APPSTORE.md` | App Store Connect copy, review notes and checklist |
 
 ### Adding a Chromium browser

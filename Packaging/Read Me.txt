@@ -1,0 +1,18 @@
+Profile Picker
+==============
+
+1. Drag "Profile Picker.app" onto the Applications folder in this window.
+2. Open Profile Picker from your Applications folder.
+3. Click "Make Default Browser" in the window that appears.
+
+Profile Picker lives in the menu bar. Every link you click then opens in the
+browser and profile you choose, or a small picker appears next to the mouse.
+
+This build is signed with a Developer ID certificate and notarized by Apple.
+It runs outside the App Sandbox, so browser profiles work directly and no
+helper script is needed.
+
+Requires macOS 26 or later.
+
+Privacy: no network access, no analytics, no account.
+https://github.com/ondrej-li/ppicker/blob/main/PRIVACY.md

@@ -14,7 +14,7 @@ on:
         type: boolean
   push:
     tags:
-      - "v*"
+      - "testflight-v*"
 
 concurrency:
   group: testflight-${{ github.ref }}

@@ -10,7 +10,7 @@ Values in **bold** are copy-paste ready.
 | SKU | **PROFILEPICKER1** |
 | Apple ID | (created by App Store Connect) |
 | Version | **1.0.0** |
-| Build | **2** (`CURRENT_PROJECT_VERSION` in `project.yml`) |
+| Build | **3** (`CURRENT_PROJECT_VERSION` in `project.yml`) |
 | Team ID | **B592D69P29** |
 | Primary language | English (U.S.) |
 | Category | Utilities (secondary: Productivity) |
@@ -26,8 +26,9 @@ Values in **bold** are copy-paste ready.
 ## App record
 
 The app record `cz.ondralinek.ppicker` was created on 2026-11-22. **Build 1** was uploaded the same
-day and **build 2** on 2026-11-23 (Rules layout and developer-build fixes). Add the latest build to
-an internal tester group in TestFlight when processing completes. The steps below are kept for reference; Apple has no API for creating app records, so
+day and **build 2** on 2026-11-23 (Rules layout and developer-build fixes). **Build 3** is prepared
+with JSON settings export/import and is the next upload. Add the latest processed build to an
+internal tester group in TestFlight. The steps below are kept for reference; Apple has no API for creating app records, so
 this one step has to happen in the App Store Connect web interface:
 
 1. Open <https://appstoreconnect.apple.com/apps> and click **+ ▸ New App**.
@@ -88,7 +89,7 @@ A PICKER THAT STAYS OUT OF THE WAY
 The picker appears next to the pointer, takes no focus from the app you were using, and closes with Esc. Choose with 1–9, the arrow keys or a click; ⌘C copies the link. Hold ⌥ Option while clicking any link to force the picker. "Always for this site" and "Always for links from this app" turn a one-off choice into a rule.
 
 YOUR BROWSERS, YOUR PROFILES
-Profile names and colours are read from the browser's own profile list, so they look the way you named them. Choose which browsers and profiles appear in the picker, or hide the menu bar icon and forget it is there.
+Profile names and colours are read from the browser's own profile list, so they look the way you named them. Choose which browsers and profiles appear in the picker, or hide the menu bar icon and forget it is there. Export your rules and settings as a JSON file to keep a backup or move them to another Mac.
 
 PRIVATE BY DESIGN
 No account. No analytics. No network requests. Your rules live in a JSON file inside the app's sandbox container on your Mac. Links are written to the system log only with the address redacted.
@@ -107,6 +108,7 @@ First release.
 • Route links by app, host or URL with wildcard rules.
 • Send each link to a specific Chrome, Brave, Edge or Vivaldi profile.
 • A keyboard-first picker with "always for this site" rules.
+• Export and import rules and settings as JSON.
 • Optional helper for browser profiles; the app works without it.
 • No network access, no analytics, no account.
 ```

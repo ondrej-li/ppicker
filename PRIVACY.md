@@ -15,9 +15,11 @@ designed to work without an account and without sending anything anywhere.
 
 ## What is stored on your Mac
 
-- **Your settings and rules** are stored in
-  `~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json`, inside
-  the app's sandbox container. They never leave your Mac and are removed when you delete the app.
+- **Your settings and rules** are stored locally: the App Store build keeps them in
+  `~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json` inside
+  the app's sandbox container, and the direct-download build keeps them in
+  `~/Library/Application Support/config.json`. They never leave your Mac and are removed when you
+  delete the app. If you choose **Export Settings…**, the JSON file is written wherever you choose.
 - **Links** are written to the macOS system log with their address redacted, so you can diagnose
   routing if you choose to. macOS keeps and rotates that log; Profile Picker does not send it
   anywhere.

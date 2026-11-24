@@ -22,6 +22,7 @@ Profile Picker is a small macOS app that you set as your default browser. When y
 - When no rule matches: show the picker, open a specific profile, or open the link the way that browser normally would.
 - The picker is keyboard friendly: `1`–`9` to choose, arrows and Return, `⌘C` to copy the link, Esc to cancel. Hold **⌥ Option** while clicking a link to always get the picker.
 - "Always for github.com" (and similar) in the picker creates a rule for you.
+- Export and import rules and settings as a JSON file, to move them between Macs or keep a backup.
 - Native SwiftUI + AppKit, Liquid Glass, macOS 26 or later. No network access, no analytics.
 
 The App Store listing name is **Profile Picker**. Bundle ID `cz.ondralinek.ppicker`, team `B592D69P29`.
@@ -133,6 +134,7 @@ create the app record (required before the first upload).
 | `ProfilePicker/App/AppDelegate.swift` | Receives links (`kAEGetURL` Apple Event), works out the source app, routes the link; menu bar item; settings window |
 | `ProfilePicker/App/AppState.swift` | Settings (saved as JSON in the app container), default-browser status, launch at login |
 | `ProfilePicker/Core/RuleEngine.swift` | Rule matching and wildcards (pure, unit tested) |
+| `ProfilePicker/Core/SettingsDocument.swift` | Versioned JSON export/import envelope for settings |
 | `ProfilePicker/Core/Profiles.swift` | Known Chromium browsers and their data folders; `Local State` parsing |
 | `ProfilePicker/Core/BrowserCatalog.swift` | Finds installed browsers and their profiles |
 | `ProfilePicker/Core/Helper.swift` | The helper script, its installation, and running it |
@@ -168,7 +170,7 @@ The `GetURL` Apple Event carries the sender's process ID. Profile Picker maps it
 
 ## Privacy
 
-Profile Picker makes no network requests and collects nothing. Your rules are stored in `~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json`. Links are logged to the system log only with their URL redacted. See [PRIVACY.md](PRIVACY.md).
+Profile Picker makes no network requests and collects nothing. The App Store build stores your rules in `~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json`; the direct-download build stores them in `~/Library/Application Support/config.json`. Links are logged to the system log only with their URL redacted. See [PRIVACY.md](PRIVACY.md).
 
 ## License
 

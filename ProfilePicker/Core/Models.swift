@@ -40,6 +40,13 @@ nonisolated struct Condition: Codable, Hashable, Identifiable, Sendable {
         self.field = field
         self.pattern = pattern
     }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        field = try c.decode(Field.self, forKey: .field)
+        pattern = try c.decodeIfPresent(String.self, forKey: .pattern) ?? ""
+    }
 }
 
 /// "When all of these conditions match, do this."

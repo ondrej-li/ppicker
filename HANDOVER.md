@@ -11,7 +11,7 @@ was created by hand on 2026-11-22; see [APPSTORE.md](APPSTORE.md) for the remain
 | Area | State | How it was checked |
 |---|---|---|
 | Debug and Release builds | ✅ No warnings in app code | `xcodebuild` |
-| Unit tests | ✅ 16 tests pass | Rule engine, wildcards, profile parsing, config decoding, direct profile reading |
+| Unit tests | ✅ 27 tests pass | Rule engine, wildcards, profile parsing, config decoding, settings export/import, direct profile reading |
 | App Store entitlements | ✅ Only `app-sandbox` and `files.user-selected.read-write` | `codesign -d --entitlements -` on the AppStore build |
 | Developer build without helper | ✅ Profiles appear with an empty Application Scripts folder | Debug build, Browsers tab |
 | Profile discovery through the helper | ✅ Works | Found 2 Brave and 3 Chrome profiles on a real machine |
@@ -121,7 +121,13 @@ The picker lists profiles instead of the plain browser for browsers that have pr
 4. To open a link, `Launcher.open` uses the helper when there's a profile and the helper is installed. Otherwise it calls `NSWorkspace.open(_:withApplicationAt:)`. If the helper fails, it falls back to opening without a profile. If opening fails entirely, the picker is shown.
 5. To show the picker, `PickerController.show` is called.
 
-Settings are stored as JSON at `~/Library/Containers/<bundle id>/Data/Library/Application Support/config.json`, saved on every change. Decoding fills in defaults for missing keys, so you can add new fields to `Config` without breaking existing installs.
+Settings are stored as JSON in the app container for the App Store build
+(`~/Library/Containers/<bundle id>/Data/Library/Application Support/config.json`) and in
+`~/Library/Application Support/config.json` for the unsandboxed Debug/Release builds, saved on every
+change. Decoding fills in defaults for missing keys, so you can add new fields to `Config` without
+breaking existing installs. General ▸ Settings file exports a versioned `SettingsDocument` envelope
+and imports it with validation; `systemBrowserID` is intentionally not exported because it is local
+to the Mac.
 
 ## Working on it
 
@@ -196,9 +202,9 @@ release notes are in [Packaging/release-notes-1.0.0.md](Packaging/release-notes-
 
 The app record (`cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`) exists. Apple has no API for creating
 app records, so that step was done in the App Store Connect website. Build 1 was uploaded on
-2026-11-22; build 2 followed on 2026-11-23 with the Rules layout and developer-build fixes. Add the
-build to an internal tester group in TestFlight. Bump `CURRENT_PROJECT_VERSION` before the next
-upload.
+2026-11-22; build 2 followed on 2026-11-23 with the Rules layout and developer-build fixes. Build 3
+adds JSON settings export/import and is the next upload. Add the processed build to an internal
+tester group in TestFlight, and bump `CURRENT_PROJECT_VERSION` before the upload after that.
 
 ## Ideas for later
 

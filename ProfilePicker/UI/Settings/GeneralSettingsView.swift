@@ -1,4 +1,6 @@
+import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct GeneralSettingsView: View {
     @Bindable var state: AppState
@@ -61,6 +63,21 @@ struct GeneralSettingsView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
+
+            Section {
+                HStack(spacing: 8) {
+                    Button("Export Settings…") { exportSettings() }
+                    Button("Import Settings…") { importSettings() }
+                    Spacer()
+                }
+            } header: {
+                Text("Settings file")
+            } footer: {
+                Text("Export your rules, fallback, hidden browsers and menu bar setting as JSON. "
+                     + "Import replaces those settings. Profile names, emails and the previous default browser are not included.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
         }
         .formStyle(.grouped)
         .navigationTitle("General")
@@ -68,5 +85,71 @@ struct GeneralSettingsView: View {
             launchAtLogin = state.launchAtLogin
             state.refreshDefaultBrowserStatus()
         }
+    }
+
+    private var appVersion: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "unknown"
+        let build = info?["CFBundleVersion"] as? String ?? "unknown"
+        return "\(AppInfo.name) \(version) (\(build))"
+    }
+
+    private func exportSettings() {
+        let panel = NSSavePanel()
+        panel.title = "Export Settings"
+        panel.prompt = "Export"
+        panel.allowedContentTypes = [.json]
+        panel.nameFieldStringValue = "Profile Picker Settings.json"
+        panel.isExtensionHidden = false
+        panel.canCreateDirectories = true
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+
+        do {
+            let document = SettingsDocument.make(config: state.config, generator: appVersion)
+            try document.encoded().write(to: url, options: .atomic)
+        } catch {
+            present(error, title: "Could not export settings")
+        }
+    }
+
+    private func importSettings() {
+        let panel = NSOpenPanel()
+        panel.title = "Import Settings"
+        panel.prompt = "Import"
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+
+        do {
+            let snapshot = try SettingsDocument.decode(Data(contentsOf: url))
+            let alert = NSAlert()
+            alert.messageText = "Replace your current settings?"
+            alert.informativeText = "This imports \(snapshot.rules.count) "
+                + "rule\(snapshot.rules.count == 1 ? "" : "s") from “\(url.lastPathComponent)” and replaces "
+                + "your current rules, fallback, hidden browsers and menu bar setting."
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "Import")
+            alert.addButton(withTitle: "Cancel")
+            guard alert.runModal() == .alertFirstButtonReturn else { return }
+            state.config = snapshot.applied(to: state.config)
+        } catch {
+            present(error, title: "Could not import settings")
+        }
+    }
+
+    private func present(_ error: Error, title: String) {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = error.localizedDescription
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 }

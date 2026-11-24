@@ -203,7 +203,7 @@ release notes are in [Packaging/release-notes-1.0.0.md](Packaging/release-notes-
 The app record (`cz.ondralinek.ppicker`, SKU `PROFILEPICKER1`) exists. Apple has no API for creating
 app records, so that step was done in the App Store Connect website. Build 1 was uploaded on
 2026-11-22; build 2 followed on 2026-11-23 with the Rules layout and developer-build fixes. Build 3
-adds JSON settings export/import and is the next upload. Add the processed build to an internal
+was uploaded on 2026-11-24 with JSON settings export/import. Add the processed build to an internal
 tester group in TestFlight, and bump `CURRENT_PROJECT_VERSION` before the upload after that.
 
 ## Ideas for later

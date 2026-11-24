@@ -26,9 +26,9 @@ Values in **bold** are copy-paste ready.
 ## App record
 
 The app record `cz.ondralinek.ppicker` was created on 2026-11-22. **Build 1** was uploaded the same
-day and **build 2** on 2026-11-23 (Rules layout and developer-build fixes). **Build 3** is prepared
-with JSON settings export/import and is the next upload. Add the latest processed build to an
-internal tester group in TestFlight. The steps below are kept for reference; Apple has no API for creating app records, so
+day, **build 2** on 2026-11-23 (Rules layout and developer-build fixes), and **build 3** on
+2026-11-24 (JSON settings export/import). Add the latest processed build to an internal tester group
+in TestFlight. The steps below are kept for reference; Apple has no API for creating app records, so
 this one step has to happen in the App Store Connect web interface:
 
 1. Open <https://appstoreconnect.apple.com/apps> and click **+ ▸ New App**.

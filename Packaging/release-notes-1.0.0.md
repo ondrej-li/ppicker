@@ -21,6 +21,7 @@ Apple.
 - Chrome, Brave, Edge and Vivaldi profiles, with the names and colours from the browser itself.
 - Keyboard-first picker: `1`–`9`, arrows, Return, Esc, `⌘C`; hold **⌥** when clicking a link to force it.
 - “Always for this site” and “Always for links from this app” turn a choice into a rule.
+- Export and import rules and settings as JSON, to move them between Macs or keep a backup.
 - Menu bar app with no Dock icon; optional open at login.
 
 ## About this build

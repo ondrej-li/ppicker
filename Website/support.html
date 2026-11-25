@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support — Profile Picker</title>
+<meta name="description" content="Setup, rules, browser profiles and troubleshooting for Profile Picker on macOS.">
+<meta name="theme-color" content="#070812">
+<link rel="canonical" href="https://ppicker.ondralinek.cz/support.html">
+<link rel="alternate" hreflang="en" href="https://ppicker.ondralinek.cz/support.html">
+<link rel="alternate" hreflang="cs" href="https://ppicker.ondralinek.cz/cs/support.html">
+<link rel="alternate" hreflang="x-default" href="https://ppicker.ondralinek.cz/support.html">
+<link rel="icon" href="/assets/icon-300.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-300.png">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+</head>
+<body class="doc">
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/assets/icon-300.png" alt="" width="34" height="34">
+      <span>Profile Picker</span>
+    </a>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#download">Download</a>
+      <a href="/support.html" class="on">Support</a>
+      <a href="https://github.com/ondrej-li/ppicker" rel="me">GitHub</a>
+      <a class="lang" href="/cs/support.html" hreflang="cs" lang="cs">Čeština</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap narrow">
+    <h1>Support</h1>
+    <p class="updated">Profile Picker 1.0.0 · macOS 26 or later</p>
+
+    <p>Most questions are answered by the first two sections below. If not, the issue tracker is the quickest way to reach us.</p>
+
+    <h2>Make Profile Picker the default browser</h2>
+    <ol>
+      <li>Open Profile Picker from Applications. The settings window appears.</li>
+      <li>Go to <strong>General</strong> and click <strong>Make Default Browser</strong>.</li>
+      <li>Confirm the macOS prompt. The status should turn green.</li>
+    </ol>
+    <p>You can also set it in System Settings → Desktop &amp; Dock → Default web browser. The app lives in the menu bar; clicking a link is enough to wake it.</p>
+
+    <h2>Browser profiles</h2>
+    <h3>A profile is missing from the picker</h3>
+    <ul>
+      <li>Make sure the browser is installed and the profile exists in it. Open the browser once after creating a profile.</li>
+      <li>In Profile Picker, open <strong>Settings → Browsers</strong> and click the refresh button.</li>
+      <li>Check that the profile's switch is on. Hidden profiles do not appear in the picker or in the rule editor.</li>
+      <li>In the <strong>App Store build</strong>, profile support needs the optional helper: Settings → Browsers → <strong>Install Helper…</strong>. The direct-download build reads profiles itself and needs nothing extra.</li>
+    </ul>
+
+    <h3>Which browsers support profiles?</h3>
+    <p>Chrome, Brave, Edge, Vivaldi and Chromium. Safari, Firefox and other browsers work as a whole browser, without profiles.</p>
+
+    <h2>Rules and the picker</h2>
+    <h3>How do I create a rule?</h3>
+    <p>Open <strong>Settings → Rules</strong> and click <strong>+</strong>. A rule has conditions (the app a link was clicked in, the host, or the whole URL) and an action (the picker or a browser/profile). Rules are checked from top to bottom; the first match wins. The <strong>Test a link</strong> box shows where a link would go.</p>
+    <p>The quickest way is in the picker itself: choose a target, then pick <strong>Always for this site</strong> or <strong>Always for links from this app</strong>.</p>
+
+    <h3>The picker does not appear</h3>
+    <ul>
+      <li>Check <strong>Settings → General → When no rule matches</strong>. If it opens a browser, the picker only appears when no rule matches.</li>
+      <li>A rule may be catching the link. Use the <strong>Test a link</strong> box to see which one.</li>
+      <li>Hold <strong>⌥ Option</strong> while clicking a link to force the picker.</li>
+      <li>Make sure Profile Picker is the default browser; if another browser opens links, macOS is not sending them to Profile Picker.</li>
+    </ul>
+
+    <h3>A link opened without the profile I chose</h3>
+    <p>If the browser cannot be launched with a profile, Profile Picker falls back to opening the link in that browser without a profile, so the link is not lost. In the App Store build this happens when the helper is not installed; in the direct build, check that the browser is installed and can be opened normally.</p>
+
+    <h2>Data and privacy</h2>
+    <h3>Where are my rules stored?</h3>
+    <p>In <code>~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json</code>. There is no account and no cloud copy. Deleting the app removes the container and the rules.</p>
+    <p>Read the <a href="/privacy.html">privacy policy</a> for the full details.</p>
+
+    <h2>Still stuck?</h2>
+    <p>Open an issue at <a href="https://github.com/ondrej-li/ppicker/issues">github.com/ondrej-li/ppicker/issues</a> or write to <a href="mailto:ondrej.linek@gmail.com">ondrej.linek@gmail.com</a>. Please include your macOS version, the browser and profile, the link (or a similar one) and what you expected to happen.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Ondřej Linek · MIT license</span>
+    <span><a href="/privacy.html">Privacy</a> · <a href="/support.html">Support</a> · <a href="https://github.com/ondrej-li/ppicker">GitHub</a> · <a href="mailto:ondrej.linek@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>

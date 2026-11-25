@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podpora — Profile Picker</title>
+<meta name="description" content="Nastavení, pravidla, profily prohlížečů a řešení problémů s Profile Pickerem na macOS.">
+<meta name="theme-color" content="#070812">
+<link rel="canonical" href="https://ppicker.ondralinek.cz/cs/support.html">
+<link rel="alternate" hreflang="en" href="https://ppicker.ondralinek.cz/support.html">
+<link rel="alternate" hreflang="cs" href="https://ppicker.ondralinek.cz/cs/support.html">
+<link rel="alternate" hreflang="x-default" href="https://ppicker.ondralinek.cz/support.html">
+<link rel="icon" href="/assets/icon-300.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-300.png">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+</head>
+<body class="doc">
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/cs/">
+      <img src="/assets/icon-300.png" alt="" width="34" height="34">
+      <span>Profile Picker</span>
+    </a>
+    <nav>
+      <a href="/cs/#features">Funkce</a>
+      <a href="/cs/#download">Stažení</a>
+      <a href="/cs/support.html" class="on">Podpora</a>
+      <a href="https://github.com/ondrej-li/ppicker" rel="me">GitHub</a>
+      <a class="lang" href="/support.html" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap narrow">
+    <h1>Podpora</h1>
+    <p class="updated">Profile Picker 1.0.0 · macOS 26 nebo novější</p>
+
+    <p>Většinu otázek zodpoví první dvě části níže. Pokud ne, nejrychleji se ozvěte přes issue tracker.</p>
+
+    <h2>Nastavení jako výchozí prohlížeč</h2>
+    <ol>
+      <li>Otevřete Profile Picker ze složky Aplikace. Objeví se okno nastavení.</li>
+      <li>Přejděte na <strong>Obecné</strong> a klikněte na <strong>Make Default Browser</strong>.</li>
+      <li>Potvrďte dotaz macOS. Stav by měl zezelenat.</li>
+    </ol>
+    <p>Nastavit se dá i v Systémovém nastavení → Plocha a Dock → Výchozí webový prohlížeč. Aplikace žije v menu baru; ke kliknutí na odkaz se sama probudí.</p>
+
+    <h2>Profily prohlížečů</h2>
+    <h3>V panelu chybí profil</h3>
+    <ul>
+      <li>Ověřte, že je prohlížeč nainstalovaný a profil v něm existuje. Po vytvoření profilu prohlížeč jednou otevřete.</li>
+      <li>V Profile Pickeru otevřete <strong>Nastavení → Prohlížeče</strong> a klikněte na tlačítko obnovení.</li>
+      <li>Zkontrolujte, že je přepínač profilu zapnutý. Skryté profily se v panelu ani v editoru pravidel neobjeví.</li>
+      <li>Ve <strong>verzi z App Storu</strong> potřebuje výběr profilů volitelný pomocný skript: Nastavení → Prohlížeče → <strong>Install Helper…</strong>. Přímá verze čte profily sama a nic dalšího nepotřebuje.</li>
+    </ul>
+
+    <h3>Které prohlížeče umí profily?</h3>
+    <p>Chrome, Brave, Edge, Vivaldi a Chromium. Safari, Firefox a další prohlížeče fungují jako celek, bez profilů.</p>
+
+    <h2>Pravidla a panel</h2>
+    <h3>Jak vytvořím pravidlo?</h3>
+    <p>Otevřete <strong>Nastavení → Pravidla</strong> a klikněte na <strong>+</strong>. Pravidlo má podmínky (aplikace, ze které odkaz přišel, doména, nebo celá adresa) a akci (panel, nebo prohlížeč/profil). Pravidla se procházejí shora dolů; první shoda vyhrává. Pole <strong>Test a link</strong> ukáže, kam odkaz povede.</p>
+    <p>Nejrychlejší cesta je přímo v panelu: vyberte cíl a pak <strong>Always for this site</strong> nebo <strong>Always for links from this app</strong>.</p>
+
+    <h3>Panel se neobjevuje</h3>
+    <ul>
+      <li>Zkontrolujte <strong>Nastavení → Obecné → When no rule matches</strong>. Pokud otevírá prohlížeč, panel se ukáže jen tehdy, když žádné pravidlo neodpovídá.</li>
+      <li>Odkaz může zachytit pravidlo. Pomůže pole <strong>Test a link</strong>.</li>
+      <li>Podržte <strong>⌥ Option</strong> při kliknutí na odkaz a panel si vyžádejte.</li>
+      <li>Ověřte, že je Profile Picker výchozí prohlížeč; pokud odkazy otevírá jiný prohlížeč, macOS je Profile Pickeru neposílá.</li>
+    </ul>
+
+    <h3>Odkaz se otevřel bez zvoleného profilu</h3>
+    <p>Pokud prohlížeč nejde spustit s profilem, Profile Picker odkaz otevře v daném prohlížeči bez profilu, aby se neztratil. Ve verzi z App Storu se to stane, když není nainstalovaný pomocný skript; u přímé verze zkontrolujte, že je prohlížeč nainstalovaný a jde normálně otevřít.</p>
+
+    <h2>Data a soukromí</h2>
+    <h3>Kde jsou moje pravidla?</h3>
+    <p>V souboru <code>~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json</code>. Neexistuje účet ani cloudová kopie. Smazáním aplikace zmizí i kontejner s pravidly.</p>
+    <p>Podrobnosti najdete v <a href="/cs/privacy.html">zásadách ochrany soukromí</a>.</p>
+
+    <h2>Stále to nejde?</h2>
+    <p>Otevřete issue na <a href="https://github.com/ondrej-li/ppicker/issues">github.com/ondrej-li/ppicker/issues</a> nebo napište na <a href="mailto:ondrej.linek@gmail.com">ondrej.linek@gmail.com</a>. Uveďte prosím verzi macOS, prohlížeč a profil, odkaz (nebo podobný) a co jste očekávali.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Ondřej Linek · licence MIT</span>
+    <span><a href="/cs/privacy.html">Soukromí</a> · <a href="/cs/support.html">Podpora</a> · <a href="https://github.com/ondrej-li/ppicker">GitHub</a> · <a href="mailto:ondrej.linek@gmail.com">E-mail</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zásady ochrany soukromí — Profile Picker</title>
+<meta name="description" content="Profile Picker nic nesbírá. Bez účtu, bez analytiky, bez síťového přístupu. Pravidla zůstávají na vašem Macu.">
+<meta name="theme-color" content="#070812">
+<link rel="canonical" href="https://ppicker.ondralinek.cz/cs/privacy.html">
+<link rel="alternate" hreflang="en" href="https://ppicker.ondralinek.cz/privacy.html">
+<link rel="alternate" hreflang="cs" href="https://ppicker.ondralinek.cz/cs/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://ppicker.ondralinek.cz/privacy.html">
+<link rel="icon" href="/assets/icon-300.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-300.png">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+</head>
+<body class="doc">
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/cs/">
+      <img src="/assets/icon-300.png" alt="" width="34" height="34">
+      <span>Profile Picker</span>
+    </a>
+    <nav>
+      <a href="/cs/#features">Funkce</a>
+      <a href="/cs/#download">Stažení</a>
+      <a href="/cs/support.html">Podpora</a>
+      <a href="https://github.com/ondrej-li/ppicker" rel="me">GitHub</a>
+      <a class="lang" href="/privacy.html" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap narrow">
+    <h1>Zásady ochrany soukromí</h1>
+    <p class="updated">Platné od 20. listopadu 2026</p>
+
+    <p>Profile Picker je aplikace pro macOS, která otevírá odkazy v prohlížeči a profilu, který si vyberete. Je navržená tak, aby fungovala bez účtu a bez odesílání čehokoli jinam.</p>
+
+    <h2>Co Profile Picker sbírá</h2>
+    <p><strong>Nic.</strong> Profile Picker nesbírá, neodesílá, neprodává ani nesdílí žádné osobní údaje.</p>
+    <ul>
+      <li>Žádná analytika, telemetrie, reklama ani SDK pro hlášení pádů.</li>
+      <li>Aplikace neuskutečňuje žádná síťová připojení.</li>
+      <li>Nevyžaduje účet, přihlášení, e-mailovou adresu ani identifikátor zařízení.</li>
+    </ul>
+
+    <h2>Co se ukládá na vašem Macu</h2>
+    <ul>
+      <li><strong>Nastavení a pravidla</strong> jsou v souboru <code>~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json</code> v kontejneru aplikace. Nikam se neodesílají a smažou se spolu s aplikací.</li>
+      <li><strong>Odkazy</strong> se zapisují do systémového logu macOS se skrytou adresou, abyste mohli případně ladit směrování. Log spravuje a rotuje macOS; Profile Picker ho nikam neposílá.</li>
+      <li><strong>Profily prohlížečů</strong> se čtou, aby je panel mohl nabídnout. Přímá verze čte soubor <code>Local State</code> prohlížeče sama. Verze z App Storu používá volitelný pomocný skript popsaný níže.</li>
+    </ul>
+
+    <h2>Volitelný pomocný skript (verze z App Storu)</h2>
+    <p>Pomocný skript je krátký shellový skript, který je součástí aplikace a je zveřejněný v <a href="https://github.com/ondrej-li/ppicker/blob/main/ProfilePicker/Core/Helper.swift">open-source repozitáři</a>. Nainstalujete ho sami v nastavení Profile Pickeru do jeho vlastní složky Application Scripts. Umí dvě věci: zkopírovat seznam názvů profilů prohlížeče a požádat prohlížeč o otevření odkazu v daném profilu. Skript nepřistupuje k síti a nic jiného nečte ani nezapisuje. Smazat ho je vždy bezpečné.</p>
+
+    <h2>Děti</h2>
+    <p>Profile Picker nesbírá data od nikoho, tedy ani od dětí.</p>
+
+    <h2>Změny</h2>
+    <p>Pokud se tyto zásady změní, nová verze bude zveřejněna na této adrese s novým datem platnosti.</p>
+
+    <h2>Kontakt</h2>
+    <p>Dotazy k těmto zásadám: otevřete issue na <a href="https://github.com/ondrej-li/ppicker/issues">github.com/ondrej-li/ppicker/issues</a> nebo napište na <a href="mailto:ondrej.linek@gmail.com">ondrej.linek@gmail.com</a>.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Ondřej Linek · licence MIT</span>
+    <span><a href="/cs/privacy.html">Soukromí</a> · <a href="/cs/support.html">Podpora</a> · <a href="https://github.com/ondrej-li/ppicker">GitHub</a> · <a href="mailto:ondrej.linek@gmail.com">E-mail</a></span>
+  </div>
+</footer>
+</body>
+</html>

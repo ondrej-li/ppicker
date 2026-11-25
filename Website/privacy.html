@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Profile Picker</title>
+<meta name="description" content="Profile Picker collects nothing. No account, no analytics, no network access. Your rules stay on your Mac.">
+<meta name="theme-color" content="#070812">
+<link rel="canonical" href="https://ppicker.ondralinek.cz/privacy.html">
+<link rel="alternate" hreflang="en" href="https://ppicker.ondralinek.cz/privacy.html">
+<link rel="alternate" hreflang="cs" href="https://ppicker.ondralinek.cz/cs/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://ppicker.ondralinek.cz/privacy.html">
+<link rel="icon" href="/assets/icon-300.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-300.png">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+</head>
+<body class="doc">
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/assets/icon-300.png" alt="" width="34" height="34">
+      <span>Profile Picker</span>
+    </a>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#download">Download</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/ondrej-li/ppicker" rel="me">GitHub</a>
+      <a class="lang" href="/cs/privacy.html" hreflang="cs" lang="cs">Čeština</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap narrow">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Effective 20 November 2026</p>
+
+    <p>Profile Picker is a macOS app that opens links in the browser and browser profile you choose. It is designed to work without an account and without sending anything anywhere.</p>
+
+    <h2>What Profile Picker collects</h2>
+    <p><strong>Nothing.</strong> Profile Picker does not collect, transmit, sell or share any personal data.</p>
+    <ul>
+      <li>No analytics, telemetry, advertising or crash-reporting SDKs.</li>
+      <li>No network connections are made by the app.</li>
+      <li>No account, sign-in, email address or device identifier is requested.</li>
+    </ul>
+
+    <h2>What is stored on your Mac</h2>
+    <ul>
+      <li><strong>Your settings and rules</strong> are stored in <code>~/Library/Containers/cz.ondralinek.ppicker/Data/Library/Application Support/config.json</code>, inside the app's container. They never leave your Mac and are removed when you delete the app.</li>
+      <li><strong>Links</strong> are written to the macOS system log with their address redacted, so you can diagnose routing if you choose to. macOS keeps and rotates that log; Profile Picker does not send it anywhere.</li>
+      <li><strong>Browser profiles</strong> are read so the picker can show them. In the direct-download build the app reads the browser's <code>Local State</code> file itself. The App Store build uses the optional helper described below.</li>
+    </ul>
+
+    <h2>The optional helper (App Store build)</h2>
+    <p>The helper is a short shell script that ships inside the app and is also published in the <a href="https://github.com/ondrej-li/ppicker/blob/main/ProfilePicker/Core/Helper.swift">open-source repository</a>. You install it yourself from Profile Picker's settings, into Profile Picker's own Application Scripts folder. It has two commands: copy the browser's list of profile names, and ask the browser to open a link with a given profile. The script does not access the network and does not read or write anything else. Deleting it is always safe.</p>
+
+    <h2>Children</h2>
+    <p>Profile Picker does not collect data from anyone, including children.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy changes, the new version will be published at this address with a new effective date.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about this policy: open an issue at <a href="https://github.com/ondrej-li/ppicker/issues">github.com/ondrej-li/ppicker/issues</a> or write to <a href="mailto:ondrej.linek@gmail.com">ondrej.linek@gmail.com</a>.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Ondřej Linek · MIT license</span>
+    <span><a href="/privacy.html">Privacy</a> · <a href="/support.html">Support</a> · <a href="https://github.com/ondrej-li/ppicker">GitHub</a> · <a href="mailto:ondrej.linek@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>

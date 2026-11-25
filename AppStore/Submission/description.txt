@@ -1,0 +1,37 @@
+Profile Picker is the default browser for people who use more than one browser profile.
+
+Set it as your default browser, and every link you click is routed by your rules: links from Slack open in Brave's Work profile, GitHub opens in Chrome, your client wiki opens in a separate profile. When no rule matches, Profile Picker can show a small picker next to the pointer so you choose a browser and profile in one keystroke — or open a default browser and stay out of the way.
+
+RULES THAT MATCH HOW YOU WORK
+• Match the app the link was clicked in, the site's host, or the whole URL.
+• Use * and ? wildcards, and comma-separated alternatives.
+• Rules are checked top to bottom; the first match wins.
+• Reorder, disable, duplicate and edit rules.
+• Test a link in the Rules pane to see where it will open.
+
+A PICKER THAT STAYS OUT OF THE WAY
+• Appears next to the pointer and takes no focus from the app you were using.
+• Choose with 1–9, the arrow keys, Return or a click.
+• ⌘C copies the link; Esc closes the picker.
+• Hold ⌥ Option while clicking any link to force the picker.
+• "Always for this site" and "Always for links from this app" turn a one-off choice into a rule.
+
+YOUR BROWSERS, YOUR PROFILES
+• Chrome, Brave, Edge and Vivaldi profiles, read from the browser's own profile list.
+• Safari, Firefox and other browsers as a whole.
+• Hide browsers or profiles you do not want in the picker.
+• Open a browser without a profile to use its last used profile.
+
+MADE FOR THE MENU BAR
+Profile Picker lives in the menu bar, with no Dock icon. Open it at login if you want the first link of the day to be instant. Open Settings from the menu bar or by launching the app again.
+
+PORTABLE SETTINGS
+Export your rules and settings as a JSON file, and import them on another Mac. The file is validated before anything is replaced.
+
+PRIVATE BY DESIGN
+No account. No analytics. No network requests. Your rules and settings stay on your Mac.
+
+A NOTE ON BROWSER PROFILES
+macOS does not let sandboxed Mac App Store apps read other apps' data or pass command-line arguments to them. For Chromium profile selection, Profile Picker includes an optional, readable helper script that you install yourself from Settings ▸ Browsers into Profile Picker's own Application Scripts folder. Without it, Profile Picker still routes links between browsers; only profile selection needs the helper.
+
+Requires macOS 26 or later. Universal: Apple silicon and Intel.

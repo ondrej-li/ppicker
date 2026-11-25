@@ -136,7 +136,7 @@ its own and makes no network connections. No export-compliance documents are nee
 
 ## Screenshots
 
-Mac screenshots must be 16:10 and at least one set is required. Upload 3–5 images at one of these
+Mac screenshots must be 16:10 and at least one is required. Upload 1–10 images at one of these
 sizes (PNG or JPEG, no transparency):
 
 | Size | Typical use |
@@ -145,6 +145,9 @@ sizes (PNG or JPEG, no transparency):
 | 1440 × 900 | most common MacBook |
 | 2560 × 1600 | Retina, recommended |
 | 2880 × 1800 | Retina, largest |
+
+A ready-to-upload set is in [AppStore/Submission/README.md](AppStore/Submission/README.md): six
+2880 × 1800 PNGs plus the copy-paste description, promotional text, keywords and review notes.
 
 Suggested shots and captions:
 
@@ -204,10 +207,10 @@ section of App Store Connect; add the build to the internal tester group after p
 
 - [x] App record created in App Store Connect (2026-11-22).
 - [ ] Name, subtitle, description, keywords, URLs and category filled in.
-- [x] Build 2 uploaded (2026-11-23); add it to a tester group and test on TestFlight.
+- [x] Build 3 uploaded (2026-11-24); add it to a tester group and test on TestFlight.
 - [ ] App Privacy: Data Not Collected.
 - [ ] Age rating: 4+.
-- [ ] Screenshots uploaded (2560 × 1600 or 2880 × 1800).
+- [ ] Screenshots uploaded from `AppStore/Submission/screenshots/` (2880 × 1800).
 - [ ] Review notes pasted.
 - [ ] Build selected on the 1.0.0 page, then **Add for Review**.
 
@@ -220,6 +223,8 @@ section of App Store Connect; add the build to the internal tester group after p
 | `ProfilePicker/Assets.xcassets` | App icon and menu bar icon |
 | `scripts/make-icon.swift` | Redraws the icon artwork |
 | `AppStore/AppIcon-1024.png` | 1024 px icon for the store listing |
+| `AppStore/Submission/` | Copy-paste listing text and six 2880 × 1800 screenshots |
+| `scripts/make-appstore-screenshots.py` | Renders the screenshot set |
 | `scripts/release.sh` | Archive, export and optionally upload |
 | `scripts/ExportOptions.plist` | App Store Connect export options |
 | `.github/workflows/ci.yml` | Build and test on every push |

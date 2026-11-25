@@ -1,0 +1,8 @@
+First release.
+
+• Route links by app, host or URL with wildcard rules.
+• Send each link to a specific Chrome, Brave, Edge or Vivaldi profile.
+• A keyboard-first picker with "always for this site" rules.
+• Export and import rules and settings as JSON.
+• Optional helper for browser profiles; the app works without it.
+• No network access, no analytics, no account.

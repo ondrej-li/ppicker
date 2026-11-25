@@ -1,0 +1,18 @@
+App under review: Profile Picker 1.0.0 (build 3).
+
+Profile Picker is a menu bar app that becomes the default browser and routes links to a chosen browser/profile. There is no account, no login, and no network access. The app is a LSUIElement; it has no Dock icon. Launch it, or choose Settings… from its menu bar item, to open the settings window.
+
+To test:
+1. Open Profile Picker. The General pane opens on first launch (or launch it again).
+2. Click "Make Default Browser" and confirm the macOS prompt. (You can switch back in System Settings › Desktop & Dock › Default web browser.)
+3. Click any link in another app (Mail, Notes, Safari, etc.). With no rules, the picker appears; choose a browser or profile, or press Esc.
+4. Settings ▸ Rules: add a rule for a host or URL, e.g. host "*.example.com" → a browser/profile. Use "Test a link" to see the result.
+5. Settings ▸ General: set "When no rule matches" to a browser or "Show the picker".
+6. Settings ▸ General ▸ Settings file: Export Settings… writes a JSON file; Import Settings… reads it back and validates it before replacing anything.
+
+Browser profiles:
+The App Store build is sandboxed. macOS does not allow it to read another app's data or pass command-line arguments. For profile selection in Chrome, Brave, Edge or Vivaldi, the app offers an optional helper script. Settings ▸ Browsers ▸ Install Helper… opens Profile Picker's Application Scripts folder; click Install Helper to write the script there. The script only copies the browser's profile list and asks the browser to open a URL with a profile. Without it, link routing works; profile selection needs the helper. The helper is optional and never runs unless installed.
+
+No special hardware or account is required. Requires macOS 26 or later.
+
+Support: https://ppicker.ondralinek.cz/support.html

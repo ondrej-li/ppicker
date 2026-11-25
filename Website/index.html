@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile Picker — every link in the right browser profile</title>
+<meta name="description" content="A macOS default browser that opens every link in the browser and profile you choose, with rules for apps, sites and URLs. Free, open source, no tracking.">
+<meta name="theme-color" content="#070812">
+<link rel="canonical" href="https://ppicker.ondralinek.cz/">
+<link rel="alternate" hreflang="en" href="https://ppicker.ondralinek.cz/">
+<link rel="alternate" hreflang="cs" href="https://ppicker.ondralinek.cz/cs/">
+<link rel="alternate" hreflang="x-default" href="https://ppicker.ondralinek.cz/">
+<link rel="icon" href="/assets/icon-300.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-300.png">
+<link rel="stylesheet" href="/assets/style.css?v=1">
+<meta property="og:title" content="Profile Picker">
+<meta property="og:description" content="Every link, in the right browser profile. A small macOS app with rules for apps, sites and URLs.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ppicker.ondralinek.cz/">
+<meta property="og:image" content="https://ppicker.ondralinek.cz/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/assets/icon-300.png" alt="" width="34" height="34">
+      <span>Profile Picker</span>
+    </a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/ondrej-li/ppicker" rel="me">GitHub</a>
+      <a class="lang" href="/cs/" hreflang="cs" lang="cs">Čeština</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="glow"></div>
+    <div class="wrap hero-inner">
+      <img class="app-icon" src="/assets/icon-300.png" alt="Profile Picker icon" width="112" height="112">
+      <p class="eyebrow">macOS 26 · menu bar</p>
+      <h1>Every link,<br>in the right profile.</h1>
+      <p class="lede">Profile Picker is the default browser that sends each link to the browser and profile you choose — by the app it came from, the site, or a rule you wrote.</p>
+      <p class="meta">Chrome · Brave · Edge · Vivaldi · Safari and any other browser · free and open source</p>
+      <p class="cta">
+        <a class="button" href="#download">Download for macOS</a>
+        <a class="quiet-link" href="https://github.com/ondrej-li/ppicker" rel="me">View source on GitHub</a>
+      </p>
+    </div>
+    <div class="wrap stage-wrap">
+      <div class="stage">
+        <img class="shot-main" src="/assets/shot-rules.png" alt="Profile Picker rules settings with three rules and a link tester" loading="eager" decoding="async">
+        <img class="shot-picker" src="/assets/shot-picker.png" alt="The Profile Picker panel choosing between two Brave profiles" loading="eager" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="wrap">
+      <h2>One default browser. Every profile.</h2>
+      <p class="section-lede">If you use Chrome, Brave, Edge or Vivaldi, you have more than one profile: work and personal, a client's account, a test account. Profile Picker makes the choice once and then gets out of the way.</p>
+      <div class="grid">
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span>
+          <h3>Rules that match how you work</h3>
+          <p>Match the app a link was clicked in, the host, or the whole URL, with <code>*</code> wildcards and comma-separated alternatives. Rules are checked top to bottom and the first match wins.</p>
+        </article>
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></span>
+          <h3>Real browser profiles</h3>
+          <p>Chrome, Brave, Edge, Vivaldi and Chromium profiles, with the names and colours from the browser itself. Open a link in the right profile, not the one that happened to be used last.</p>
+        </article>
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 10h6M7 14h4"/></svg></span>
+          <h3>A picker, only when you want it</h3>
+          <p>The panel appears next to the pointer, takes no focus from the app you were using, and closes with Esc. Choose with <code>1</code>–<code>9</code>, the arrow keys or a click; <code>⌘C</code> copies the link.</p>
+        </article>
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></span>
+          <h3>Always for this site</h3>
+          <p>A one-off choice becomes a rule: “Always for github.com”, “Always for links from Slack”, or both at once. Hold <code>⌥</code> when clicking a link to force the picker every time.</p>
+        </article>
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <h3>Private by design</h3>
+          <p>No account, no analytics, no network requests. Your rules live in a JSON file inside the app's container on your Mac. Links are logged only with the address redacted.</p>
+        </article>
+        <article class="card">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="2"/><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M9 14h6"/></svg></span>
+          <h3>Out of the way</h3>
+          <p>A menu bar app with no Dock icon. Hide the menu bar item if you want a completely invisible helper. Open at login only makes the first link a little faster.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="wrap">
+      <h2>Three steps, then forget it</h2>
+      <ol class="steps">
+        <li>
+          <h3>Make it your default browser</h3>
+          <p>Settings → General → <strong>Make Default Browser</strong>. macOS asks once; after that every link comes through Profile Picker.</p>
+        </li>
+        <li>
+          <h3>Add a rule, or just click</h3>
+          <p>Write rules in Settings → Rules, or let the picker create one with “Always for this site”. The built-in tester shows where a link will open.</p>
+        </li>
+        <li>
+          <h3>Arrive in the right profile</h3>
+          <p>Links open straight in the profile you chose, or the picker appears next to the pointer. No dock icon, no window, no waiting.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="wrap">
+      <h2>Take a closer look</h2>
+      <div class="gallery">
+        <figure>
+          <img src="/assets/shot-rules.png" alt="Rules list with app, host and URL conditions and the link tester" loading="lazy" decoding="async">
+          <figcaption>Rules for apps, sites and whole URLs, with a tester that tells you where a link would go.</figcaption>
+        </figure>
+        <figure>
+          <img src="/assets/shot-picker.png" alt="The picker panel with browser profiles and a remember menu" loading="lazy" decoding="async">
+          <figcaption>The picker stays next to the pointer and closes with Esc. The app you clicked from stays in front.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="download" class="download">
+    <div class="wrap">
+      <div class="download-inner">
+        <img src="/assets/icon-300.png" alt="" width="96" height="96">
+        <div>
+          <h2>Download Profile Picker</h2>
+          <p>Version 1.0.0 · macOS 26 or later · Apple silicon and Intel.</p>
+          <p class="cta">
+            <a class="button" href="https://github.com/ondrej-li/ppicker/releases/download/v1.0.0/ProfilePicker-1.0.0.dmg">Download the DMG</a>
+            <a class="quiet-link" href="https://github.com/ondrej-li/ppicker/releases/latest">All downloads and checksums</a>
+          </p>
+          <p class="fineprint">Open the DMG and drag Profile Picker to Applications. The app is signed with a Developer ID certificate and notarized by Apple.</p>
+          <div class="note">This direct-download build runs outside the App Sandbox, so browser profiles work without a helper script. The Mac App Store version is sandboxed and uses an optional helper for profile selection instead.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Ondřej Linek · MIT license</span>
+    <span><a href="/privacy.html">Privacy</a> · <a href="/support.html">Support</a> · <a href="https://github.com/ondrej-li/ppicker">GitHub</a> · <a href="mailto:ondrej.linek@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>
